@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <style>
+        .areas>.col {
+            margin: 10px 10px 10px 10px;
+        }
+
+        .areas>.col>.row {
+            padding: 15px;
+            background-color: #DEDEDE;
+            width: 400px;
+            text-align: justify;
+        }
+
+        .areas>.col>.row:nth-child(2) {
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Navbar</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Escritório</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Equipe</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Atuação</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Publicações</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Compliance</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Contato</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="container-sm">
+            <div class="row areas">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Direito Criminal
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                            desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                            qualidade em crimes de competência comum e federal em todas as esferas,
+                            inquérito, processo e execução penal, e instâncias.
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Direito Civil
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Atuamos em ações de cobrança, busca e apreensão de bens, execução de títulos,
+                            recuperação de créditos; Responsabilidade civil e obrigações; Propriedade, Posse,
+                            Usucapião e Ações possessórias; Análise e elaboração de contratos; Reserva de
+                            Margem Consignável e Contratos Bancários;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Direito de Família e Sucessões
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Atuamos, também, na área de Direito de Família e Sucessões, incluído divórcio e
+                            partilha de bens, reconhecimento e dissolução de união estável, regularização de
+                            alimentos e guarda, investigação de paternidade planejamento sucessório,
+                            inventários e arrolamento de bens, testamentos, dentre outros;
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Direito da Saúde
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Atuamos em ações de Responsabilidade civil médica e das sociedades médicas,
+                            envolvendo hospitais, clínicas, planos de saúde, laboratórios entre outros;
+                            Requisições de medicamentos perante órgãos públicos; Ainda, atuamos perante a
+                            Vara da Fazenda Pública e o Juizado Especial da Fazenda Pública, em demandas
+                            urgentes com pedido liminar.
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Direito do Consumidor
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Estamos habilitadas para atuar em situações relacionadas às relações
+                            consumeristas, atuando no ajuizamento de ações, na elaboração de defesas e no
+                            acompanhamento processual perante o Procon, Delegacias do Consumidor,
+                            Ministério Público, Juizados Especiais Cíveis e Justiça Comum.
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Direito Trabalhista
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Atuamos em processos judiciais, individuais e coletivos, na área trabalhista, e,
+                            também, oferecemos serviço de atuação em ações indenizatórias decorrente de
+                            acidente de trabalho, representação em audiências e elaboração de acordos.
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Direito Previdenciário
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Dispomos da capacidade técnica necessária para a atuação em processos judiciais
+                            previdenciários; Concessão de aposentadorias por tempo de contribuição, idade,
+                            invalidez e especiais (atividades insalubres e periculosas); Pensões por morte;
+                            Auxílio-doença (acidentário e previdenciário); Revisão de pensões e benefícios;
+                            Conversão de auxílio-doença em aposentadoria por invalidez, entre outros;
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="container-sm equipe">
+            <div class="row">
+                <div class="col">
+                    Equipe
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/equipe.jpg" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Dra. Larissa de Souza Dias
+                            Sócia-fundadora
+                            Bacharela em Direito pela Faculdade Cesusc, inscrita na OAB/SC 62.170, especialista em
+                            Prática Penal Avançada e pós-graduanda em Direito de família e sucessões pela Faculdade
+                            IBMEC.
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <img src="./static/images/equipe.jpg" class="img-fluid" alt="Equipe">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Dra. Vitória Igarçaba Kovaltchuk
+                            Sócia-fundadora
+                            Bacharela em Direito pela Universidade do Sul de Santa Catarina, inscrita na OAB/SC
+                            XXXX, pós-graduanda em “Direito Penal e Processo Penal Aplicados” pela Escola Brasileira
+                            de Direito e integrante do curso “Justice”, de Harvard.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
