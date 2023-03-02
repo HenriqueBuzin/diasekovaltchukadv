@@ -12,21 +12,18 @@
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
     <style>
-        .areas>.col {
-            margin: 10px 10px 10px 10px;
-        }
-
-        .areas>.col>.row {
-            padding: 15px;
+        .areas > [class*='col-'] > div {
+            padding: 30px;
+            margin: 5px;
             background-color: #DEDEDE;
-            width: 400px;
             text-align: justify;
         }
 
-        .areas>.col>.row:nth-child(2) {
+        .areas > [class*='col-'] > div > p:nth-child(2) {
             font-weight: bold;
             text-align: center;
             text-transform: uppercase;
+            margin: 5px;
         }
 
         .fundo {
@@ -34,7 +31,14 @@
         }
 
 
+        .display-flex {
+            display: flex;
+            flex-wrap: wrap;
+        }
 
+        .display-flex > [class*='col-'] {
+            flex-grow: 1;
+        }
 
 
         .divisoria {
@@ -93,213 +97,325 @@
             </nav>
         </div>
 
-        <div class="container-sm">
-            <div class="row areas">
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Direito Criminal
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
-                            desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
-                            qualidade em crimes de competência comum e federal em todas as esferas,
-                            inquérito, processo e execução penal, e instâncias.
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Direito Civil
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Atuamos em ações de cobrança, busca e apreensão de bens, execução de títulos,
-                            recuperação de créditos; Responsabilidade civil e obrigações; Propriedade, Posse,
-                            Usucapião e Ações possessórias; Análise e elaboração de contratos; Reserva de
-                            Margem Consignável e Contratos Bancários;
-                        </div>
-                    </div>
+
+
+        
+
+        <div class="row areas">
+
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    <p>Direito Criminal</p>
+
+                    <p>Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.</p>
+
                 </div>
 
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Direito de Família e Sucessões
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Atuamos, também, na área de Direito de Família e Sucessões, incluído divórcio e
-                            partilha de bens, reconhecimento e dissolução de união estável, regularização de
-                            alimentos e guarda, investigação de paternidade planejamento sucessório,
-                            inventários e arrolamento de bens, testamentos, dentre outros;
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Direito da Saúde
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Atuamos em ações de Responsabilidade civil médica e das sociedades médicas,
-                            envolvendo hospitais, clínicas, planos de saúde, laboratórios entre outros;
-                            Requisições de medicamentos perante órgãos públicos; Ainda, atuamos perante a
-                            Vara da Fazenda Pública e o Juizado Especial da Fazenda Pública, em demandas
-                            urgentes com pedido liminar.
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Direito do Consumidor
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Estamos habilitadas para atuar em situações relacionadas às relações
-                            consumeristas, atuando no ajuizamento de ações, na elaboração de defesas e no
-                            acompanhamento processual perante o Procon, Delegacias do Consumidor,
-                            Ministério Público, Juizados Especiais Cíveis e Justiça Comum.
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Direito Trabalhista
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Atuamos em processos judiciais, individuais e coletivos, na área trabalhista, e,
-                            também, oferecemos serviço de atuação em ações indenizatórias decorrente de
-                            acidente de trabalho, representação em audiências e elaboração de acordos.
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Direito Previdenciário
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Dispomos da capacidade técnica necessária para a atuação em processos judiciais
-                            previdenciários; Concessão de aposentadorias por tempo de contribuição, idade,
-                            invalidez e especiais (atividades insalubres e periculosas); Pensões por morte;
-                            Auxílio-doença (acidentário e previdenciário); Revisão de pensões e benefícios;
-                            Conversão de auxílio-doença em aposentadoria por invalidez, entre outros;
-                        </div>
-                    </div>
-                </div>
 
             </div>
+
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    Direito Criminal
+
+                    Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias. Atuação em crimes contra a vida, perante o
+                    Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    Direito Criminal
+
+                    Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias. Atuação em crimes contra a vida, perante o
+                    Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    Direito Criminal
+
+                    Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias. Atuação em crimes contra a vida, perante o
+                    Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.
+
+                </div>
+
+
+            </div>
+
         </div>
-        <div class="container-sm equipe">
-            <div class="row">
-                <div class="col">
-                    Equipe
+
+        <div class="row areas">
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    Direito Criminal
+
+                    Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias. Atuação em crimes contra a vida, perante o
+                    Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.
+
                 </div>
+
+
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/equipe.jpg" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Dra. Larissa de Souza Dias
-                            Sócia-fundadora
-                            Bacharela em Direito pela Faculdade Cesusc, inscrita na OAB/SC 62.170, especialista em
-                            Prática Penal Avançada e pós-graduanda em Direito de família e sucessões pela Faculdade
-                            IBMEC.
-                        </div>
-                    </div>
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    Direito Criminal
+
+                    Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias. Atuação em crimes contra a vida, perante o
+                    Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.
+
                 </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/equipe.jpg" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Dra. Vitória Igarçaba Kovaltchuk
-                            Sócia-fundadora
-                            Bacharela em Direito pela Universidade do Sul de Santa Catarina, inscrita na OAB/SC
-                            XXXX, pós-graduanda em “Direito Penal e Processo Penal Aplicados” pela Escola Brasileira
-                            de Direito e integrante do curso “Justice”, de Harvard.
-                        </div>
-                    </div>
+
+
+            </div>
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    Direito Criminal
+
+                    Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias. Atuação em crimes contra a vida, perante o
+                    Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.
+
                 </div>
+
+
+            </div>
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    Direito Criminal
+
+                    Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias. Atuação em crimes contra a vida, perante o
+                    Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.
+
+                </div>
+
+
             </div>
         </div>
 
 
-        <div class="row fundo">
+
+        <div class="row areas">
+            <div class="col-md-3 display-flex">
+
+                <div>
+
+                    <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
+                    Direito Criminal
+
+                    Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias. Atuação em crimes contra a vida, perante o
+                    Tribunal do Júri, oferecendo serviços
+                    desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
+                    qualidade em crimes de competência comum e federal em todas as esferas,
+                    inquérito, processo e execução penal, e instâncias.
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container-sm equipe">
+        <div class="row">
             <div class="col">
-                <div class="divisoria"></div>
-                Contato
-                
-                <div class="divisoria"></div>
-            </div>
-            <div class="col">
-                Formulário
+                Equipe
+
+
+
+
+
+
+
+
+
+
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <img src="./static/images/equipe.jpg" class="img-fluid" alt="Equipe">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        Dra. Larissa de Souza Dias
+                        Sócia-fundadora
+                        Bacharela em Direito pela Faculdade Cesusc, inscrita na OAB/SC 62.170, especialista em
+                        Prática Penal Avançada e pós-graduanda em Direito de família e sucessões pela Faculdade
+                        IBMEC.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <img src="./static/images/equipe.jpg" class="img-fluid" alt="Equipe">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        Dra. Vitória Igarçaba Kovaltchuk
+                        Sócia-fundadora
+                        Bacharela em Direito pela Universidade do Sul de Santa Catarina, inscrita na OAB/SC
+                        XXXX, pós-graduanda em “Direito Penal e Processo Penal Aplicados” pela Escola Brasileira
+                        de Direito e integrante do curso “Justice”, de Harvard.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row fundo">
+        <div class="col">
+            <div class="divisoria"></div>
+            Contato
+
+            <div class="divisoria"></div>
+        </div>
+        <div class="col">
+            Formulário
+        </div>
+    </div>
 
 
 
 
 
+    <div class="container">
+        <div class="row display-flex">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="box">
+                    <h3>Some text</h3>
 
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="box">
+                    <h3>Some text</h3>
+                    <img src="//placehold.it/150x150" class="center-block">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="box">
+                    <h3>Some text more text that wraps to new link</h3>
+                    <img src="//placehold.it/150x150" class="center-block">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="box">
+                    <h3>Some text</h3>
+                    <img src="//placehold.it/150x150" class="center-block">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="box">
+                    <h3>Some text</h3>
+                    <img src="//placehold.it/150x150" class="center-block">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="box">
+                    <h3>Some text</h3>
+                    <img src="//placehold.it/150x150" class="center-block">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /bootstrap grid example -->
 
 
 
