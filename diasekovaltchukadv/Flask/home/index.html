@@ -14,7 +14,7 @@
     <style>
         .areas>[class*='col-']>div {
             padding: 20px;
-            margin: 5px;
+            margin: 10px 5px 5px 10px;
             background-color: #DEDEDE;
             text-align: justify;
         }
@@ -28,8 +28,9 @@
 
         .fundo {
             background-color: #B66878;
+            color: #FFFFFF;
+            padding: 15px;
         }
-
 
         .display-flex {
             display: flex;
@@ -38,7 +39,7 @@
 
         .display-flex>[class*='col-'] {
             flex-grow: 1;
-            
+
         }
 
 
@@ -50,8 +51,14 @@
             height: 5px;
             display: block;
             border-radius: 15px;
-            filter: brightness(100%);
+            box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+        }
 
+        .back {
+            background-image: url("./static/images/justice.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 30em;
         }
     </style>
 
@@ -59,7 +66,7 @@
 </head>
 
 <body>
-    <div class="container-fluid .p-0">
+    <div class="container-fluid">
         <div class="row">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
@@ -98,33 +105,23 @@
             </nav>
         </div>
 
-
-
-
+        <div class="row back"></div>
 
         <div class="row areas">
 
             <div class="col-md-4 display-flex">
-
                 <div>
-
                     <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
                     <p>Direito Criminal</p>
-
                     <p>Atuação em crimes contra a vida, perante o Tribunal do Júri, oferecendo serviços
                         desde a fase investigativa até o Plenário do Júri. Ainda, garantimos uma defesa de
                         qualidade em crimes de competência comum e federal em todas as esferas,
                         inquérito, processo e execução penal, e instâncias.</p>
-
                 </div>
-
-
             </div>
 
             <div class="col-md-4 display-flex">
-
                 <div>
-
                     <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
                     <p>Direito Civil</p>
                     <p>
@@ -133,16 +130,11 @@
                         Usucapião e Ações possessórias; Análise e elaboração de contratos; Reserva de
                         Margem Consignável e Contratos Bancários;
                     </p>
-
                 </div>
-
-
             </div>
 
             <div class="col-md-4 display-flex">
-
                 <div>
-
                     <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
                     <p>Direito de Família e Sucessões</p>
                     <p>
@@ -153,23 +145,15 @@
                         Direito
 
                     </p>
-
                 </div>
-
-
             </div>
-
-          
 
         </div>
 
         <div class="row areas">
 
-
             <div class="col-md-4 display-flex">
-
                 <div>
-
                     <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
                     <p>Direito da Saúde</p>
                     <p>
@@ -180,14 +164,10 @@
                         urgentes com pedido liminar.
                     </p>
                 </div>
-
-
             </div>
 
             <div class="col-md-4 display-flex">
-
                 <div>
-
                     <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
                     <p>Direito do Consumidor</p>
                     <p>
@@ -196,15 +176,11 @@
                         acompanhamento processual perante o Procon, Delegacias do Consumidor,
                         Ministério Público, Juizados Especiais Cíveis e Justiça Comum.
                     </p>
-
                 </div>
-
-
             </div>
+
             <div class="col-md-4 display-flex">
-
                 <div>
-
                     <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
                     <p>Direito Trabalhista</p>
                     <p>
@@ -212,21 +188,15 @@
                         também, oferecemos serviço de atuação em ações indenizatórias decorrente de
                         acidente de trabalho, representação em audiências e elaboração de acordos.
                     </p>
-
                 </div>
-
-
             </div>
-         
-            
+
         </div>
 
-
         <div class="row areas">
+
             <div class="col-md-4 display-flex">
-
                 <div>
-
                     <img src="./static/images/algemas.png" class="img-fluid" alt="Equipe">
                     <p>Direito Previdenciário</p>
                     <p>
@@ -238,9 +208,8 @@
                     </p>
 
                 </div>
-
-
             </div>
+
         </div>
 
 
@@ -250,81 +219,18 @@
 
 
 
-
-
-
-
-        <div class="container-sm equipe">
-            <div class="row">
-                <div class="col">
-                    Equipe
-
-
-
-
-
-
-
-
-
-
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/equipe.jpg" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Dra. Larissa de Souza Dias
-                            Sócia-fundadora
-                            Bacharela em Direito pela Faculdade Cesusc, inscrita na OAB/SC 62.170, especialista em
-                            Prática Penal Avançada e pós-graduanda em Direito de família e sucessões pela Faculdade
-                            IBMEC.
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <img src="./static/images/equipe.jpg" class="img-fluid" alt="Equipe">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Dra. Vitória Igarçaba Kovaltchuk
-                            Sócia-fundadora
-                            Bacharela em Direito pela Universidade do Sul de Santa Catarina, inscrita na OAB/SC
-                            XXXX, pós-graduanda em “Direito Penal e Processo Penal Aplicados” pela Escola Brasileira
-                            de Direito e integrante do curso “Justice”, de Harvard.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
         <div class="row fundo">
-            <div class="col">
+            <div class="col-md-6">
                 <div class="divisoria"></div>
-                Contato
-
+                <p>Contato</p>
                 <div class="divisoria"></div>
             </div>
-            <div class="col">
-                Formulário
+            <div class="col-md-6">
+                <p>Formulário</p>
             </div>
         </div>
-
-
-
-
-
-
-
 
 
     </div>
