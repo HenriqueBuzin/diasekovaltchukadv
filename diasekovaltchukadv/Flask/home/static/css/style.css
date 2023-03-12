@@ -1,119 +1,125 @@
 .areas>[class*='col-']>div {
-            padding: 20px;
-            margin: 15px 15px 15px 15px;
-            background-color: rgba(248, 249, 250, 1) !important;
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-            text-align: justify;
-        }
+    padding: 20px;
+    margin: 15px 15px 15px 15px;
+    background-color: #ECECEC;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    text-align: justify;
+}
 
-        .areas>[class*='col-']>div>p:nth-child(2) {
-            font-weight: bold;
-            text-align: center;
-            text-transform: uppercase;
-            margin: 5px;
-        }
+.areas>[class*='col-']>div>p:nth-child(2) {
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 5px;
+}
 
-        .fundo {
-            background-color: #CF8C95;
-            color: #FFFFFF;
-            padding: 15px;
-        }
+.fundo {
+    background-color: #CF8C95;
+    color: #FFFFFF;
+    padding: 15px;
+}
 
-        .display-flex {
-            display: flex;
-            flex-wrap: wrap;
-        }
+.display-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
 
-        .display-flex>[class*='col-'] {
-            flex-grow: 1;
+.display-flex>[class*='col-'] {
+    flex-grow: 1;
 
-        }
+}
 
+.divisoria {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: #CF97A0;
+    width: 100%;
+    height: 5px;
+    display: block;
+    border-radius: 15px;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+}
 
-        .divisoria {
-            margin-top: 15px;
-            margin-bottom: 15px;
-            background-color: #CF97A0;
-            width: 100%;
-            height: 5px;
-            display: block;
-            border-radius: 15px;
-            box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
-        }
+.back {
+    background-image: url("../images/justice.jpg");
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 30em;
+    margin-bottom: 15px;
+}
 
-        .back {
-            background-image: url("./static/images/justice.jpg");
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-            background-size: cover;
-            background-repeat: no-repeat;
-            height: 30em;
-            margin-bottom: 15px;
-        }
+.send {
+    margin-top: 5px;
+    width: 100%;
+}
 
-        .send {
-            margin-top: 5px;
-            width: 100%;
-        }
+.part1 {
+    text-align: center;
+    font-size: 1.5em;
 
-        .part1 {
-            text-align: center;
-            font-size: 1.5em;
+}
 
-        }
+.contact {
+    font-weight: bold;
+    font-size: 2em;
+}
 
-        .contact {
-            font-weight: bold;
-            font-size: 2em;
-        }
+form {
+    background-color: #5A5E61;
+    padding: 15px;
+    border-radius: 5px;
+}
 
-        form {
-            background-color: #5A5E61;
-            padding: 15px;
-            border-radius: 5px;
-        }
+.divisoria2 {
+    background-color: #CF8C95;
+    height: 5px;
+}
 
-        .divisoria2 {
-            background-color: #CF8C95;
-            height: 5px;
-        }
+.nav-link:hover {
+    color: #CF8C95;
+}
 
-        .nav-link:hover {
-            color: #CF8C95;
-        }
+#about,
+#acting,
+#team {
+    padding: 15px;
+    text-align: justify;
+}
 
-        #about,
-        #acting,
-        #team {
-            padding: 15px;
-            text-align: justify;
-        }
+#acting>div>div>div>h1,
+#about>div>h1,
+#team>div>div>div>h1 {
+    text-align: center;
+}
 
-        #acting>div>div>div>h1,
-        #about>div>h1,
-        #team>div>div>div>h1 {
-            text-align: center;
-        }
+#team>div>div>div>img {
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    margin-top: 15px;
+}
 
-        #team>div>div>div>img {
-            border-radius: 50%;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 50%;
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-        }
-        
-        #team>div>div>div>p:nth-child(2) {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 900;
-        }
+#team>div>div>div>p:nth-child(2) {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 900;
+    margin-top: 15px;
+}
 
-        #team>div>div>div>p:nth-child(3) {
-            text-align: center;
-            font-weight: 800;
-            font-size: 16px;
-        }
-        #team>div>div>div>p:nth-child(4) {
-            text-align: justify;
-        }
+#team>div>div>div>p:nth-child(3) {
+    text-align: center;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+#team>div>div>div>p:nth-child(4) {
+    text-align: justify;
+}
+
+.bg-light {
+    background-color: #ECECEC !important;
+}
