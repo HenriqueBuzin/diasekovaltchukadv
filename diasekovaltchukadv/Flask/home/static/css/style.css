@@ -123,3 +123,8 @@ form {
 .bg-light {
     background-color: #ECECEC !important;
 }
+
+#contact > div > p > a {
+    color: #FFFFFF;
+    padding: 5px;
+}
