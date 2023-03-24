@@ -40,9 +40,9 @@
 }
 
 .back {
-    background-image: url("../images/justice.jpg");
+    background-image: url("../images/justice.png");
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-    background-size: cover;
+    background-size: 100% 500px;
     background-repeat: no-repeat;
     height: 30em;
     margin-bottom: 15px;
