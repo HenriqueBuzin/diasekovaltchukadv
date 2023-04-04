@@ -22,7 +22,7 @@
 }
 
 .fundo {
-    background-color: #A57110;
+    background-color: #f1efe0;
     color: #FFFFFF;
     padding: 15px;
 }
@@ -89,6 +89,10 @@ form {
     height: 5px;
 }
 
+.nav-link {
+    text-transform: uppercase;
+}
+
 .nav-link:hover {
     color: #A57110;
 }
@@ -104,6 +108,7 @@ form {
 #about>div>div>h1,
 #team>div>div>div>h1 {
     text-align: center;
+    text-transform: uppercase;
 }
 
 #team>div>div>div>img {
