@@ -22,7 +22,7 @@
 }
 
 .fundo {
-    background-color: #f1efe0;
+    background-color: #D2BB65;
     color: #FFFFFF;
     padding: 15px;
 }
@@ -39,7 +39,7 @@
 .divisoria {
     margin-top: 15px;
     margin-bottom: 15px;
-    background-color: #EDB40D;
+    background-color: #EEEAD7;
     width: 100%;
     height: 5px;
     display: block;
@@ -65,7 +65,8 @@
 .send:hover,
 .send:active,
 .send:focus-visible {
-    background-color: #A57110 !important;
+    background-color: #D2BB65;
+    text-transform: uppercase;
 }
 
 .part1 {
@@ -85,7 +86,7 @@ form {
 }
 
 .divisoria2 {
-    background-color: #A57110;
+    background-color: #D2BB65;
     height: 5px;
 }
 
@@ -149,4 +150,8 @@ form {
 
 #about > img {
     height: 200px;
+}
+
+#div3 {
+    background-color: #D2BB65;
 }
