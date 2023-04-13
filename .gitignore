@@ -1,2 +1,5 @@
 # Pycache
 /diasekovaltchukadv/src/__pycache__/
+
+# Configs
+/diasekovaltchukadv/src/config.py
