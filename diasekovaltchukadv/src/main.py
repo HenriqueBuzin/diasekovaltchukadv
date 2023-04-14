@@ -60,7 +60,7 @@ def send():
     
     flash("Mensagem enviada com sucesso!")
  
-  return redirect("/")
+  return redirect("/#contact")
 
 if __name__ == "__main__":
  app.run()
