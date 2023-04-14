@@ -65,7 +65,7 @@
 .send:hover,
 .send:active,
 .send:focus-visible {
-    background-color: #D2BB65;
+    background-color: #D2BB65 !important;
 }
 
 .part1 {
