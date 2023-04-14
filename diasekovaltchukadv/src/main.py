@@ -46,7 +46,8 @@ def send():
     msg = Message(
       subject = f"{formContato.assunto}",
       sender = app.config.get("MAIL_USERNAME"),
-      recipients = ["cultura.henrique@gmail.com", app.config.get("MAIL_USERNAME")],
+      # recipients = ["diasekovaltchukadv@gmail.com", app.config.get("MAIL_USERNAME")],
+      recipients = ["diasekovaltchukadv@gmail.com"],
       body = f"""
         Nome: {formContato.nome}
         E-mail: {formContato.email}
