@@ -37,7 +37,8 @@
 }
 
 #about-in > div > img {
-    height: 20em;
+    height: 426px;
+    width: 345px;
     border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -54,7 +55,7 @@
 }
 
 #about-in > div > p {
-    font-size: 1em;
+    font-size: 1.1em;
     padding-top: 5px;
 }
 
@@ -66,6 +67,11 @@
 
 #firstIcons > p > a {
     text-decoration: none;
+}
+
+#firstIcons {
+    display: block;
+    margin: 0 auto;
 }
 
 /* Áreas */
