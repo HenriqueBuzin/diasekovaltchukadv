@@ -5,13 +5,7 @@
 /* Home */
 
 .back {
-    background-image: url("../images/justice.png");
-    background-size: 100% 350px;
-    background-repeat: no-repeat;
-    height: 22em;
     margin-bottom: 15px;
-    display: block;
-    margin: 0 auto;
 }
 
 .divisoria2 {
