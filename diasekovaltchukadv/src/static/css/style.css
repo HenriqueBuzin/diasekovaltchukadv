@@ -6,10 +6,12 @@
 
 .back {
     background-image: url("../images/justice.png");
-    background-size: 100% 500px;
+    background-size: 100% 350px;
     background-repeat: no-repeat;
-    height: 30em;
+    height: 22em;
     margin-bottom: 15px;
+    display: block;
+    margin: 0 auto;
 }
 
 .divisoria2 {
@@ -40,23 +42,22 @@
     height: 426px;
     width: 345px;
     border-radius: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     margin: 0 auto;
     display: block;
 }
 
 #about-in {
     padding: 20px;
-    margin: 15px 15px 15px 15px;
     background-color: #ECECEC;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-    text-align: justify;
 }
 
 #about-in > div > p {
     font-size: 1.1em;
-    padding-top: 5px;
+    padding-top: 10px;
+    text-align: justify;
 }
 
 .iconsI {
@@ -65,12 +66,13 @@
     padding: 5px;
 }
 
-#firstIcons > p > a >img {
-    text-decoration: none;
+#firstIcons > div {
+    width: 158px;
+    margin: 0 auto;
 }
 
-#firstIcons {
-    display: block;
+#firstIcons > div > a {
+    text-decoration: none;
     margin: 0 auto;
 }
 
