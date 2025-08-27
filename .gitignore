@@ -1,5 +1,7 @@
-# Pycache
-/diasekovaltchukadv/src/__pycache__/
+# .gitignore
 
-# Configs
-/diasekovaltchukadv/src/config.py
+# Pycache
+__pycache__/
+
+# .env
+.env

@@ -1,13 +1,17 @@
-version: '3.3'
+# docker-compose.yml
+
 services:
   flask:
     container_name: flask
-    command: python3 -m flask run --host=0.0.0.0 -p 80
     restart: always
     build:
       context: ./diasekovaltchukadv/
       dockerfile: Dockerfile
+    working_dir: /diasekovaltchukadv/src
+    command: python3 main.py
     volumes:
       - './diasekovaltchukadv/src/:/diasekovaltchukadv/src/'
     ports:
-      - '80:80'
+      - '80:5000'
+    env_file:
+      - .env

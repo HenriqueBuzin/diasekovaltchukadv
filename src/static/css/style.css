@@ -1,3 +1,5 @@
+/* src/static/css/style.css */
+
 * {
     font-family: 'Roboto', Arial;
 }
@@ -27,12 +29,12 @@
 
 /* About */
 
-#about > div > div > h1 {
+#about>div>div>h1 {
     text-align: center;
     text-transform: uppercase;
 }
 
-#about-in > div > img {
+#about-in>div>img {
     height: 426px;
     width: 345px;
     border-radius: 5px;
@@ -48,7 +50,7 @@
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-#about-in > div > p {
+#about-in>div>p {
     font-size: 1.1em;
     padding-top: 10px;
     text-align: justify;
@@ -60,12 +62,12 @@
     padding: 5px;
 }
 
-#firstIcons > div {
+#firstIcons>div {
     width: 158px;
     margin: 0 auto;
 }
 
-#firstIcons > div > a {
+#firstIcons>div>a {
     text-decoration: none;
     margin: 0 auto;
 }
