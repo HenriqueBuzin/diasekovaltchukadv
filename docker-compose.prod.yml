@@ -1,4 +1,4 @@
-# docker-compose.yml
+# docker-compose.prod.yml
 
 services:
   flask:
@@ -21,9 +21,10 @@ services:
     container_name: caddy
     restart: always
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
     volumes:
-      - ./Caddyfile.dev:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     depends_on:

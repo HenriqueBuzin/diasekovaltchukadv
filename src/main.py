@@ -1,7 +1,9 @@
 # src/main.py
 
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_mail import Mail, Message
+from smtplib import SMTPException
+from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 
 def require_env(name: str) -> str:
@@ -17,6 +19,14 @@ def parse_bool_env(name: str) -> bool:
 app = Flask(__name__)
 app.secret_key = require_env("FLASK_SECRET_KEY")
 
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+
+app.config.update(
+    PREFERRED_URL_SCHEME="https",
+    SESSION_COOKIE_SECURE=not parse_bool_env("FLASK_DEBUG"),
+    REMEMBER_COOKIE_SECURE=not parse_bool_env("FLASK_DEBUG"),
+)
+
 mail_settings = {
     "MAIL_SERVER": require_env("MAIL_SERVER"),
     "MAIL_PORT": int(require_env("MAIL_PORT")),
@@ -25,7 +35,10 @@ mail_settings = {
     "MAIL_USERNAME": require_env("MAIL_USERNAME"),
     "MAIL_PASSWORD": require_env("MAIL_PASSWORD"),
 }
+
 app.config.update(mail_settings)
+
+app.config["MAIL_DEFAULT_SENDER"] = app.config["MAIL_USERNAME"]
 
 mail = Mail(app)
 
@@ -59,20 +72,18 @@ def index():
         SOCIAL_IG_URL=SOCIAL_IG_URL,
     )
 
-@app.route("/send", methods=["GET", "POST"])
+@app.route("/send", methods=["POST"])
 def send():
-    if request.method == "POST":
-        formContato = Contato(
-            request.form.get("nome", ""),
-            request.form.get("email", ""),
-            request.form.get("telefone", ""),
-            request.form.get("assunto", ""),
-            request.form.get("mensagem", ""),
-        )
-
+    formContato = Contato(
+        request.form.get("nome", ""),
+        request.form.get("email", ""),
+        request.form.get("telefone", ""),
+        request.form.get("assunto", ""),
+        request.form.get("mensagem", ""),
+    )
+    try:
         msg = Message(
-            subject=formContato.assunto,
-            sender=app.config["MAIL_USERNAME"],
+            subject=formContato.assunto or "Contato do site",
             recipients=RECIPIENTS,
             body=(
                 f"Nome: {formContato.nome}\n"
@@ -82,11 +93,13 @@ def send():
                 f"Mensagem: {formContato.mensagem}\n"
             ),
         )
-
         mail.send(msg)
-        flash("Mensagem enviada com sucesso!")
+        flash("Mensagem enviada com sucesso!", "success")
+    except SMTPException:
+        app.logger.exception("Erro ao enviar e-mail")
+        flash("Não foi possível enviar a mensagem. Tente novamente.", "danger")
 
-    return redirect("/#contact")
+    return redirect(url_for("index") + "#contact")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=DEBUG)
