@@ -4,5 +4,5 @@
 
 :80 {
   encode gzip
-  reverse_proxy http://flask:5000
+  reverse_proxy http://flask-dev:5000
 }

@@ -1,8 +1,43 @@
-# docker-compose.yml
+# compose.yml (um único arquivo)
+
+x-caddy-base: &caddy-base
+  image: caddy:2
+  restart: always
+  volumes:
+    - caddy_data:/data
+    - caddy_config:/config
 
 services:
+  # PROD
   flask:
-    container_name: flask
+    profiles: ["prod"]
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /src
+    command: python3 main.py
+    expose:
+      - "5000"
+    env_file:
+      - .env.prod
+
+  caddy:
+    <<: *caddy-base
+    profiles: ["prod"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - flask
+
+  # DEV
+  flask-dev:
+    profiles: ["dev"]
     restart: always
     build:
       context: .
@@ -16,10 +51,9 @@ services:
     env_file:
       - .env
 
-  caddy:
-    image: caddy:2
-    container_name: caddy
-    restart: always
+  caddy-dev:
+    <<: *caddy-base
+    profiles: ["dev"]
     ports:
       - "8080:80"
     volumes:
@@ -27,7 +61,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - flask
+      - flask-dev
 
 volumes:
   caddy_data:
