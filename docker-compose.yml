@@ -20,7 +20,7 @@ services:
     expose:
       - "5000"
     env_file:
-      - .env.prod
+      - .env
 
   caddy:
     <<: *caddy-base
