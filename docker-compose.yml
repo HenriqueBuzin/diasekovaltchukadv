@@ -16,7 +16,6 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /src
-    command: python3 main.py
     expose:
       - "5000"
     env_file:
@@ -43,7 +42,6 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /src
-    command: python3 main.py
     volumes:
       - ./src/:/src/
     expose:
