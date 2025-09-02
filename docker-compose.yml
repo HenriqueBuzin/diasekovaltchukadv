@@ -1,20 +1,15 @@
-# compose.yml (um único arquivo)
+# docker-compose.yml
 
 x-caddy-base: &caddy-base
   image: caddy:2
   restart: always
-  volumes:
-    - caddy_data:/data
-    - caddy_config:/config
 
 services:
   # PROD
   flask:
     profiles: ["prod"]
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     working_dir: /src
     expose:
       - "5000"
@@ -38,9 +33,7 @@ services:
   flask-dev:
     profiles: ["dev"]
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     working_dir: /src
     volumes:
       - ./src/:/src/
