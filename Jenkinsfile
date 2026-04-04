@@ -12,7 +12,7 @@ pipeline {
 
                     if (branch == 'origin/main') {
                         sh '''
-                        cd /root/diasekovaltchuk
+                        cd /root/diasekovaltchukadv
                         git fetch origin
                         git reset --hard origin/main
                         docker compose --profile prod up -d --build
@@ -21,7 +21,7 @@ pipeline {
 
                     else if (branch == 'origin/dev') {
                         sh '''
-                        cd /root/diasekovaltchuk-dev
+                        cd /root/diasekovaltchukadv-dev
                         git fetch origin
                         git reset --hard origin/dev
                         docker compose --profile dev up -d --build
