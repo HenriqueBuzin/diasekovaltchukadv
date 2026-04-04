@@ -157,19 +157,6 @@ def send():
 
     return redirect(url_for("index") + "#contact")
 
-def require_port_env(name: str) -> int:
-    val = require_env(name)
-
-    try:
-        port = int(val)
-    except ValueError:
-        raise RuntimeError(f"{name} inválido: {val}")
-
-    if port not in (3000, 3001):
-        raise RuntimeError(f"{name} deve ser 3000 ou 3001. Recebido: {port}")
-
-    return port
-
 if __name__ == "__main__":
-    port = require_port_env("PORT", 5000)
+    port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=DEBUG)
