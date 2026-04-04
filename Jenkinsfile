@@ -8,21 +8,22 @@ pipeline {
                 script {
 
                     def branch = env.GIT_BRANCH
+                    echo "Branch detectada: ${branch}"
 
-                    if (branch == 'main') {
+                    if (branch == 'origin/main') {
                         sh '''
                         cd /root/diasekovaltchuk
-                        git reset --hard
-                        git pull origin main
+                        git fetch origin
+                        git reset --hard origin/main
                         docker compose --profile prod up -d --build
                         '''
                     }
 
-                    else if (branch == 'dev') {
+                    else if (branch == 'origin/dev') {
                         sh '''
                         cd /root/diasekovaltchuk-dev
-                        git reset --hard
-                        git pull origin dev
+                        git fetch origin
+                        git reset --hard origin/dev
                         docker compose --profile dev up -d --build
                         '''
                     }
