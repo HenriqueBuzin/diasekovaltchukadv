@@ -7,13 +7,18 @@ pipeline {
             steps {
                 script {
 
-                    def branch = env.BRANCH_NAME
+                    def branch = sh(
+                        script: "git rev-parse --abbrev-ref HEAD",
+                        returnStdout: true
+                    ).trim()
+
+                    echo "Branch detectada: ${branch}"
 
                     if (branch == 'main') {
                         sh '''
                         cd /root/diasekovaltchuk
-                        git reset --hard
-                        git pull origin main
+                        git fetch origin
+                        git reset --hard origin/main
                         docker compose --profile prod up -d --build
                         '''
                     }
@@ -21,8 +26,8 @@ pipeline {
                     else if (branch == 'dev') {
                         sh '''
                         cd /root/diasekovaltchuk-dev
-                        git reset --hard
-                        git pull origin dev
+                        git fetch origin
+                        git reset --hard origin/dev
                         docker compose --profile dev up -d --build
                         '''
                     }
