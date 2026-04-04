@@ -1,35 +1,17 @@
-# docker-compose.yml
-
-x-caddy-base: &caddy-base
-  image: caddy:2
-  restart: always
-
 services:
-  # PROD
   flask:
-    profiles: ["prod"]
     restart: always
     build: .
     working_dir: /src
-    expose:
-      - "5000"
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - PORT=3000
     env_file:
       - .env
+    networks:
+      - proxy-network
 
-  caddy:
-    <<: *caddy-base
-    profiles: ["prod"]
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - flask
-
-  # DEV
   flask-dev:
     profiles: ["dev"]
     restart: always
@@ -37,23 +19,15 @@ services:
     working_dir: /src
     volumes:
       - ./src/:/src/
-    expose:
-      - "5000"
+    ports:
+      - "127.0.0.1:3001:3001"
+    environment:
+      - PORT=3001
     env_file:
       - .env
+    networks:
+      - proxy-network
 
-  caddy-dev:
-    <<: *caddy-base
-    profiles: ["dev"]
-    ports:
-      - "8080:80"
-    volumes:
-      - ./Caddyfile.dev:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - flask-dev
-
-volumes:
-  caddy_data:
-  caddy_config:
+networks:
+  proxy-network:
+    external: true

@@ -1,8 +1,0 @@
-{
-  auto_https off
-}
-
-:80 {
-  encode gzip
-  reverse_proxy http://flask-dev:5000
-}
