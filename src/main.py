@@ -1,10 +1,11 @@
 # src/main.py
 
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, session
 from flask_mail import Mail, Message
 from smtplib import SMTPException
 from werkzeug.middleware.proxy_fix import ProxyFix
 import requests
+
 import os
 
 def require_env(name: str) -> str:
