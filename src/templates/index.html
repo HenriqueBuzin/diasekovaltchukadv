@@ -59,7 +59,7 @@
             "@type": "LegalService",
             "name": "Dias & Kovaltchuk Advogados",
             "url": "https://diasekovaltchukadv.com/",
-            "telephone": "+5548988026847",
+            "telephone": "+{{ WHATS_NUMBER }}",
             "areaServed": {
                 "@type": "City",
                 "name": "Florianópolis"
@@ -157,24 +157,7 @@
                         </a>
                         -->
 
-                        <a href="https://wa.me/{{ WHATS_NUMBER }}" onclick="
-                                var url = this.href;
-
-                                gtag('event','conversion', {
-                                'send_to': 'AW-17913181584/LZUECPCB-pocEJDr1d1C',
-                                'value': 1.0,
-                                'currency': 'BRL',
-                                'event_callback': function() {
-                                    window.open(url, '_blank');
-                                }
-                                });
-
-                                setTimeout(function(){
-                                    window.open(url, '_blank');
-                                }, 800);
-                                
-                                return false;
-                            ">
+                        <a href="https://wa.me/{{ WHATS_NUMBER }}" class="wa-track">
                             <img src="./static/images/whatsapp.png" alt="Whatsapp" class="iconsI" />
                         </a>
                     </div>
@@ -374,53 +357,19 @@
 
                 <p><a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></p>
                 <p>
-                    <a href="https://wa.me/{{ WHATS_NUMBER }}" onclick="
-                                var url = this.href;
-
-                                gtag('event','conversion', {
-                                'send_to': 'AW-17913181584/LZUECPCB-pocEJDr1d1C',
-                                'value': 1.0,
-                                'currency': 'BRL',
-                                'event_callback': function() {
-                                    window.open(url, '_blank');
-                                }
-                                });
-
-                                setTimeout(function(){
-                                    window.open(url, '_blank');
-                                }, 800);
-                                
-                                return false;
-                            ">
+                    <a href="https://wa.me/{{ WHATS_NUMBER }}" class="wa-track">
                         <span class="phone" data-phone="{{ WHATS_NUMBER }}"></span>
                     </a>
                 </p>
                 <p>
                     <a href="{{ SOCIAL_FB_URL }}" target="_blank"><i class="bi bi-facebook"></i></a>
                     <a href="{{ SOCIAL_IG_URL }}" target="_blank"><i class="bi bi-instagram"></i></a>
+                    
                     <!-- <a href="#" target="_blank"><i class="bi bi-linkedin"></i></a> -->
-
-                    <a href="https://wa.me/{{ WHATS_NUMBER }}" onclick="
-                                var url = this.href;
-
-                                gtag('event','conversion', {
-                                'send_to': 'AW-17913181584/LZUECPCB-pocEJDr1d1C',
-                                'value': 1.0,
-                                'currency': 'BRL',
-                                'event_callback': function() {
-                                    window.open(url, '_blank');
-                                }
-                                });
-    
-                                setTimeout(function(){
-                                    window.open(url, '_blank');
-                                }, 800);
-
-                                return false;
-                            ">
+                    
+                    <a href="https://wa.me/{{ WHATS_NUMBER }}" class="wa-track">
                         <i class="bi bi-whatsapp"></i>
                     </a>
-
                 </p>
 
                 <div class="divisoria"></div>
