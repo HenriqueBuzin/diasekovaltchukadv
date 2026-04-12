@@ -77,6 +77,14 @@
         }
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-phone]').forEach(el => {
+                el.innerText = formatPhoneDisplay(el.dataset.phone, true);
+            });
+        });
+    </script>
+
 </head>
 
 <body>
@@ -366,9 +374,6 @@
 
                 <p><a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></p>
                 <p>
-
-                    class="bi bi-linkedin"></i></a> -->
-
                     <a href="https://wa.me/{{ WHATS_NUMBER }}" onclick="
                                 var url = this.href;
 
@@ -387,7 +392,7 @@
                                 
                                 return false;
                             ">
-                        {{ WHATS_NUMBER }}
+                        <span class="phone" data-phone="{{ WHATS_NUMBER }}"></span>
                     </a>
                 </p>
                 <p>
