@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var tel = document.getElementById('tel');
   if (!tel) return;
 
-  function formatPhoneBR(value) {
-    var d = value.replace(/\D/g, '').slice(0, 11);
+  let lastDigits = '';
+
+  function formatPhoneBR(d) {
     if (d.length <= 2) return d.replace(/^(\d{0,2})/, '($1');
     if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
     if (d.length === 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
@@ -14,45 +15,47 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function onInput(e) {
-    var input = tel;
-    var oldValue = input.value;
-    var oldCursor = input.selectionStart;
+    let input = tel;
+    let raw = input.value.replace(/\D/g, '');
+    let cursor = input.selectionStart;
 
-    var digits = oldValue.replace(/\D/g, '');
-    var isDeleting = e.inputType && e.inputType.includes('delete');
+    let isDelete = e.inputType && e.inputType.includes('delete');
 
-    // 🚫 BLOQUEIA inserção se já estiver cheio (11 dígitos)
-    if (digits.length > 11 && !isDeleting) {
-      digits = digits.slice(0, 11);
+    // 🔥 se já está cheio e NÃO é delete → ignora input
+    if (!isDelete && lastDigits.length === 11) {
+      input.value = formatPhoneBR(lastDigits);
+      input.setSelectionRange(cursor - 1, cursor - 1);
+      return;
     }
 
-    // pega dígitos antes do cursor
-    var digitsBeforeCursor = oldValue.slice(0, oldCursor).replace(/\D/g, '').length;
+    // limita
+    let digits = raw.slice(0, 11);
+
+    // calcula posição lógica
+    let digitsBeforeCursor = input.value.slice(0, cursor).replace(/\D/g, '').length;
 
     // formata
-    var newValue = formatPhoneBR(digits);
-
-    input.value = newValue;
+    let formatted = formatPhoneBR(digits);
+    input.value = formatted;
 
     // reposiciona cursor
-    var cursor = 0;
-    var count = 0;
-
-    for (var i = 0; i < newValue.length; i++) {
-      if (/\d/.test(newValue[i])) count++;
+    let pos = 0, count = 0;
+    for (let i = 0; i < formatted.length; i++) {
+      if (/\d/.test(formatted[i])) count++;
       if (count >= digitsBeforeCursor) {
-        cursor = i + 1;
+        pos = i + 1;
         break;
       }
     }
 
-    input.setSelectionRange(cursor, cursor);
+    input.setSelectionRange(pos, pos);
+
+    // salva estado
+    lastDigits = digits;
   }
 
   tel.addEventListener('input', onInput);
-  tel.addEventListener('blur', onInput);
 
-  // valida no submit (10 ou 11 dígitos)
   document.querySelectorAll('form').forEach(function (form) {
     form.addEventListener('submit', function (e) {
       var digits = tel.value.replace(/\D/g, '');
