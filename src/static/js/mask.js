@@ -31,6 +31,31 @@ document.addEventListener('DOMContentLoaded', function () {
   tel.addEventListener('input', onInput);
   tel.addEventListener('blur', onInput);
 
+  // 🔒 trava cursor sempre no final (teclado)
+  tel.addEventListener('keydown', function (e) {
+    var allowed = ['Backspace', 'Delete', 'Tab'];
+
+    // permite Ctrl/Cmd (copiar, colar, etc)
+    if (e.ctrlKey || e.metaKey) return;
+
+    if (!allowed.includes(e.key)) {
+      var len = tel.value.length;
+      tel.setSelectionRange(len, len);
+    }
+  });
+
+  // 🔒 trava clique no meio (mouse)
+  tel.addEventListener('click', function () {
+    var len = tel.value.length;
+    tel.setSelectionRange(len, len);
+  });
+
+  // 🔒 evita seleção de texto
+  tel.addEventListener('select', function () {
+    var len = tel.value.length;
+    tel.setSelectionRange(len, len);
+  });
+
   // valida no submit (10 ou 11 dígitos)
   document.querySelectorAll('form').forEach(function (form) {
     form.addEventListener('submit', function (e) {
