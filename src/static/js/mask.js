@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ==============================
 
   document.querySelectorAll('[data-phone]').forEach(el => {
-    el.textContent = formatPhoneDisplay(el.dataset.phone, true);
+    el.textContent = formatPhoneDisplay(el.dataset.phone, false);
   });
 
   // ==============================
