@@ -13,11 +13,29 @@ document.addEventListener('DOMContentLoaded', function () {
     return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
   }
 
-  function onInput() {
+  function onInput(e) {
+    var start = tel.selectionStart;
     var before = tel.value;
+
+    var digitsBefore = before.slice(0, start).replace(/\D/g, '').length;
+
     tel.value = formatPhoneBR(before);
-    // coloca o cursor no fim (simples e seguro)
-    tel.selectionStart = tel.selectionEnd = tel.value.length;
+
+    // calcula nova posição baseada na quantidade de números digitados
+    var newPos = 0;
+    var count = 0;
+
+    for (var i = 0; i < tel.value.length; i++) {
+      if (/\d/.test(tel.value[i])) {
+        count++;
+      }
+      if (count >= digitsBefore) {
+        newPos = i + 1;
+        break;
+      }
+    }
+
+    tel.setSelectionRange(newPos, newPos);
   }
 
   tel.addEventListener('input', onInput);
