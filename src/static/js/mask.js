@@ -14,28 +14,21 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function onInput(e) {
-    var start = tel.selectionStart;
-    var before = tel.value;
+    var cursor = tel.selectionStart;
 
-    var digitsBefore = before.slice(0, start).replace(/\D/g, '').length;
+    // pega só números
+    var digits = tel.value.replace(/\D/g, '');
 
-    tel.value = formatPhoneBR(before);
+    // limita
+    digits = digits.slice(0, 11);
 
-    // calcula nova posição baseada na quantidade de números digitados
-    var newPos = 0;
-    var count = 0;
+    // formata
+    var formatted = formatPhoneBR(digits);
 
-    for (var i = 0; i < tel.value.length; i++) {
-      if (/\d/.test(tel.value[i])) {
-        count++;
-      }
-      if (count >= digitsBefore) {
-        newPos = i + 1;
-        break;
-      }
-    }
+    tel.value = formatted;
 
-    tel.setSelectionRange(newPos, newPos);
+    // tenta manter cursor estável (simples e confiável)
+    tel.setSelectionRange(formatted.length, formatted.length);
   }
 
   tel.addEventListener('input', onInput);
