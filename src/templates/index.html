@@ -80,14 +80,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('[data-phone]').forEach(el => {
-                el.innerText = formatPhoneDisplay(el.dataset.phone, true);
+                el.textContent = formatPhoneDisplay(el.dataset.phone, true);
             });
         });
     </script>
-
-</head>
-
-<body>
 
     {% if session.get('conversion_fired') %}
     <script>
@@ -99,6 +95,10 @@
     </script>
     {% set _ = session.pop('conversion_fired') %}
     {% endif %}
+
+</head>
+
+<body>
 
     <div class="container-fluid">
         <div class="row" id="home">
