@@ -78,6 +78,17 @@
 </head>
 
 <body>
+
+    {% if session.get('conversion_fired') %}
+        <script>
+            console.log('CONVERSAO DISPARADA');
+            gtag('event', 'conversion', {
+                'send_to': 'AW-17913181584/aE3cCKLPmY4cEJDr1d1C'
+            });
+        </script>
+        {% set _ = session.pop('conversion_fired') %}
+    {% endif %}
+
     <div class="container-fluid">
         <div class="row" id="home">
             <div class="divisoria2"></div>
@@ -346,15 +357,6 @@
                 {% if messages %}
                 {# pega só o último flash #}
                 {% set category, msg = (messages|last) %}
-
-                {% if session.get('conversion_fired') %}
-                    <script>
-                        gtag('event', 'conversion', {
-                            'send_to': 'AW-17913181584/aE3cCKLPmY4cEJDr1d1C'
-                        });
-                    </script>
-                    {% set _ = session.pop('conversion_fired') %}
-                {% endif %}
 
                 {# mapeia 'error' -> 'danger' se aparecer #}
                 {% set bs_cat = 'danger' if category in ['danger','error'] else category %}
