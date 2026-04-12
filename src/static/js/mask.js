@@ -14,95 +14,85 @@ function formatPhoneBR(d) {
 function formatPhoneDisplay(number, withDDI = false) {
   let digits = String(number).replace(/\D/g, '');
 
-  // remove DDI (55) se existir
+  // remove DDI (55)
   if (digits.startsWith('55')) {
     digits = digits.slice(2);
   }
 
-  // limita
   digits = digits.slice(0, 11);
 
-  // evita quebrar número incompleto
   if (digits.length < 10) return number;
 
-  let formatted = formatPhoneBR(digits);
+  const formatted = formatPhoneBR(digits);
 
   return withDDI ? `+55 ${formatted}` : formatted;
 }
 
 
 // ==============================
-// 📞 MÁSCARA + VALIDAÇÃO DO FORM
+// 🚀 INICIALIZAÇÃO GERAL
 // ==============================
 
 document.addEventListener('DOMContentLoaded', function () {
-  var tel = document.getElementById('tel');
-  if (!tel) return;
 
+  // ==============================
+  // 📞 MÁSCARA DO TELEFONE
+  // ==============================
+
+  const tel = document.getElementById('tel');
   let lastDigits = '';
 
-  function onInput(e) {
-    let input = tel;
-    let raw = input.value.replace(/\D/g, '');
-    let cursor = input.selectionStart;
+  if (tel) {
+    function onInput(e) {
+      let raw = tel.value.replace(/\D/g, '');
+      let cursor = tel.selectionStart;
 
-    let isDelete = e.inputType && e.inputType.includes('delete');
+      let isDelete = e.inputType && e.inputType.includes('delete');
 
-    // 🔥 impede inserir se já está cheio
-    if (!isDelete && lastDigits.length === 11) {
-      input.value = formatPhoneBR(lastDigits);
-      input.setSelectionRange(cursor - 1, cursor - 1);
-      return;
-    }
-
-    // limita a 11 dígitos
-    let digits = raw.slice(0, 11);
-
-    // calcula posição lógica do cursor
-    let digitsBeforeCursor = input.value
-      .slice(0, cursor)
-      .replace(/\D/g, '').length;
-
-    // aplica máscara
-    let formatted = formatPhoneBR(digits);
-    input.value = formatted;
-
-    // reposiciona cursor corretamente
-    let pos = 0, count = 0;
-    for (let i = 0; i < formatted.length; i++) {
-      if (/\d/.test(formatted[i])) count++;
-      if (count >= digitsBeforeCursor) {
-        pos = i + 1;
-        break;
+      // impede inserir se já estiver cheio
+      if (!isDelete && lastDigits.length === 11) {
+        tel.value = formatPhoneBR(lastDigits);
+        tel.setSelectionRange(cursor - 1, cursor - 1);
+        return;
       }
+
+      let digits = raw.slice(0, 11);
+
+      let digitsBeforeCursor = tel.value
+        .slice(0, cursor)
+        .replace(/\D/g, '').length;
+
+      let formatted = formatPhoneBR(digits);
+      tel.value = formatted;
+
+      let pos = 0, count = 0;
+      for (let i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i])) count++;
+        if (count >= digitsBeforeCursor) {
+          pos = i + 1;
+          break;
+        }
+      }
+
+      tel.setSelectionRange(pos, pos);
+      lastDigits = digits;
     }
 
-    input.setSelectionRange(pos, pos);
-
-    // salva estado
-    lastDigits = digits;
+    tel.addEventListener('input', onInput);
   }
 
-  tel.addEventListener('input', onInput);
-
   // ==============================
-  // ✅ VALIDAÇÃO NO SUBMIT
+  // 📞 FORMATA TELEFONES NA PÁGINA
   // ==============================
 
-  document.querySelectorAll('form').forEach(function (form) {
-    form.addEventListener('submit', function (e) {
-      var digits = tel.value.replace(/\D/g, '');
-
-      if (digits.length !== 10 && digits.length !== 11) {
-        alert('Telefone inválido. Use 10 ou 11 dígitos.');
-        e.preventDefault();
-      }
-    });
+  document.querySelectorAll('[data-phone]').forEach(el => {
+    el.textContent = formatPhoneDisplay(el.dataset.phone, true);
   });
 
-});
+  // ==============================
+  // 💬 TRACKING WHATSAPP
+  // ==============================
 
-document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.wa-track').forEach(el => {
     el.addEventListener('click', function (e) {
       e.preventDefault();
@@ -116,14 +106,33 @@ document.addEventListener('DOMContentLoaded', function () {
         window.open(url, '_blank', 'noopener,noreferrer');
       }
 
-      gtag('event','conversion', {
+      gtag('event', 'conversion', {
         'send_to': 'AW-17913181584/LZUECPCB-pocEJDr1d1C',
         'value': 1.0,
         'currency': 'BRL',
         'event_callback': openOnce
       });
 
+      // fallback
       setTimeout(openOnce, 800);
     });
   });
+
+  // ==============================
+  // ✅ VALIDAÇÃO DO FORMULÁRIO
+  // ==============================
+
+  document.querySelectorAll('form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      if (!tel) return;
+
+      const digits = tel.value.replace(/\D/g, '');
+
+      if (digits.length !== 10 && digits.length !== 11) {
+        alert('Telefone inválido. Use 10 ou 11 dígitos.');
+        e.preventDefault();
+      }
+    });
+  });
+
 });
