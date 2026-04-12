@@ -15,46 +15,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function onInput(e) {
     var input = tel;
+    var oldValue = input.value;
+    var oldCursor = input.selectionStart;
 
-    // pega só números
-    var digits = input.value.replace(/\D/g, '').slice(0, 11);
+    // pega dígitos antes do cursor
+    var digitsBeforeCursor = oldValue.slice(0, oldCursor).replace(/\D/g, '').length;
+
+    // pega todos os dígitos
+    var digits = oldValue.replace(/\D/g, '');
+
+    // limita
+    digits = digits.slice(0, 11);
 
     // formata
-    var formatted = formatPhoneBR(digits);
+    var newValue = formatPhoneBR(digits);
 
-    input.value = formatted;
+    input.value = newValue;
 
-    // 🔥 força cursor sempre no final
-    input.setSelectionRange(formatted.length, formatted.length);
+    // reposiciona cursor corretamente
+    var cursor = 0;
+    var digitsCount = 0;
+
+    for (var i = 0; i < newValue.length; i++) {
+      if (/\d/.test(newValue[i])) {
+        digitsCount++;
+      }
+      if (digitsCount >= digitsBeforeCursor) {
+        cursor = i + 1;
+        break;
+      }
+    }
+
+    input.setSelectionRange(cursor, cursor);
   }
 
   tel.addEventListener('input', onInput);
   tel.addEventListener('blur', onInput);
-
-  // 🔒 trava cursor sempre no final (teclado)
-  tel.addEventListener('keydown', function (e) {
-    var allowed = ['Backspace', 'Delete', 'Tab'];
-
-    // permite Ctrl/Cmd (copiar, colar, etc)
-    if (e.ctrlKey || e.metaKey) return;
-
-    if (!allowed.includes(e.key)) {
-      var len = tel.value.length;
-      tel.setSelectionRange(len, len);
-    }
-  });
-
-  // 🔒 trava clique no meio (mouse)
-  tel.addEventListener('click', function () {
-    var len = tel.value.length;
-    tel.setSelectionRange(len, len);
-  });
-
-  // 🔒 evita seleção de texto
-  tel.addEventListener('select', function () {
-    var len = tel.value.length;
-    tel.setSelectionRange(len, len);
-  });
 
   // valida no submit (10 ou 11 dígitos)
   document.querySelectorAll('form').forEach(function (form) {
