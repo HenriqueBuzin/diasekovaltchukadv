@@ -18,29 +18,29 @@ document.addEventListener('DOMContentLoaded', function () {
     var oldValue = input.value;
     var oldCursor = input.selectionStart;
 
+    var digits = oldValue.replace(/\D/g, '');
+    var isDeleting = e.inputType && e.inputType.includes('delete');
+
+    // 🚫 BLOQUEIA inserção se já estiver cheio (11 dígitos)
+    if (digits.length > 11 && !isDeleting) {
+      digits = digits.slice(0, 11);
+    }
+
     // pega dígitos antes do cursor
     var digitsBeforeCursor = oldValue.slice(0, oldCursor).replace(/\D/g, '').length;
-
-    // pega todos os dígitos
-    var digits = oldValue.replace(/\D/g, '');
-
-    // limita
-    digits = digits.slice(0, 11);
 
     // formata
     var newValue = formatPhoneBR(digits);
 
     input.value = newValue;
 
-    // reposiciona cursor corretamente
+    // reposiciona cursor
     var cursor = 0;
-    var digitsCount = 0;
+    var count = 0;
 
     for (var i = 0; i < newValue.length; i++) {
-      if (/\d/.test(newValue[i])) {
-        digitsCount++;
-      }
-      if (digitsCount >= digitsBeforeCursor) {
+      if (/\d/.test(newValue[i])) count++;
+      if (count >= digitsBeforeCursor) {
         cursor = i + 1;
         break;
       }
