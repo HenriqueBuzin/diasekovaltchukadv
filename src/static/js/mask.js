@@ -14,21 +14,36 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function onInput(e) {
-    var cursor = tel.selectionStart;
+    var input = tel;
+    var oldValue = input.value;
+    var oldCursor = input.selectionStart;
 
-    // pega só números
-    var digits = tel.value.replace(/\D/g, '');
+    // pega dígitos antes do cursor
+    var digitsBeforeCursor = oldValue.slice(0, oldCursor).replace(/\D/g, '').length;
 
-    // limita
-    digits = digits.slice(0, 11);
+    // pega todos os dígitos
+    var digits = oldValue.replace(/\D/g, '').slice(0, 11);
 
     // formata
-    var formatted = formatPhoneBR(digits);
+    var newValue = formatPhoneBR(digits);
 
-    tel.value = formatted;
+    input.value = newValue;
 
-    // tenta manter cursor estável (simples e confiável)
-    tel.setSelectionRange(formatted.length, formatted.length);
+    // reposiciona cursor corretamente
+    var cursor = 0;
+    var digitsCount = 0;
+
+    for (var i = 0; i < newValue.length; i++) {
+      if (/\d/.test(newValue[i])) {
+        digitsCount++;
+      }
+      if (digitsCount >= digitsBeforeCursor) {
+        cursor = i + 1;
+        break;
+      }
+    }
+
+    input.setSelectionRange(cursor, cursor);
   }
 
   tel.addEventListener('input', onInput);
