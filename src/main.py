@@ -149,6 +149,7 @@ def send():
 
         mail.send(msg)
         flash("Mensagem enviada com sucesso!", "success")
+        session['conversion_fired'] = True
     except SMTPException:
         app.logger.exception("Erro ao enviar e-mail")
         flash("Não foi possível enviar a mensagem. Tente novamente.", "danger")
