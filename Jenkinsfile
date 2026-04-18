@@ -8,32 +8,36 @@ pipeline {
                 script {
 
                     def branch = env.GIT_BRANCH.replace("origin/", "")
+                    def project = "diasekovaltchuk-adv"
+
                     echo "Branch: ${branch}"
 
                     if (branch == 'main') {
-                        sh '''
-                        cd /root/diasekovaltchukadv
+                        sh """
+                        cd /root/projects/${project}
 
                         git fetch origin
                         git reset --hard origin/main
+                        git clean -fd
 
-                        ln -sf /root/envs/.env .env
+                        ln -sf /root/envs/${project}.env .env
 
                         docker compose --profile prod up -d --build
-                        '''
+                        """
                     }
 
                     else if (branch == 'dev') {
-                        sh '''
-                        cd /root/diasekovaltchukadv-dev
+                        sh """
+                        cd /root/projects/${project}-dev
 
                         git fetch origin
                         git reset --hard origin/dev
+                        git clean -fd
 
-                        ln -sf /root/envs/.env.dev .env
+                        ln -sf /root/envs/${project}-dev.env .env
 
                         docker compose --profile dev up -d --build
-                        '''
+                        """
                     }
 
                     else {
