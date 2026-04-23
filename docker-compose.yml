@@ -6,9 +6,9 @@ services:
     build: .
     working_dir: /src
     ports:
-      - "3001:3001"
+      - "3002:3002"
     environment:
-      - PORT=3001
+      - PORT=3002
     env_file:
       - .env
     networks:
