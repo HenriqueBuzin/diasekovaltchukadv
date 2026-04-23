@@ -1,7 +1,8 @@
 services:
-  flask:
+  diasekovaltchuk:
     profiles: ["prod"]
-    restart: always
+    container_name: diasekovaltchuk
+    restart: unless-stopped
     build: .
     working_dir: /src
     ports:
@@ -13,17 +14,18 @@ services:
     networks:
       - proxy-network
 
-  flask-dev:
+  diasekovaltchuk-dev:
     profiles: ["dev"]
-    restart: always
+    container_name: diasekovaltchuk-dev
+    restart: unless-stopped
     build: .
     working_dir: /src
     volumes:
       - ./src/:/src/
     ports:
-      - "127.0.0.1:3003:3001"
+      - "127.0.0.1:3003:3003"
     environment:
-      - PORT=3001
+      - PORT=3003
     env_file:
       - .env
     networks:
