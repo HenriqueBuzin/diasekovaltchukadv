@@ -1,7 +1,6 @@
 services:
   diasekovaltchuk:
     profiles: ["prod"]
-    container_name: diasekovaltchuk
     restart: unless-stopped
     build: .
     working_dir: /src
@@ -16,7 +15,6 @@ services:
 
   diasekovaltchuk-dev:
     profiles: ["dev"]
-    container_name: diasekovaltchuk-dev
     restart: unless-stopped
     build: .
     working_dir: /src
