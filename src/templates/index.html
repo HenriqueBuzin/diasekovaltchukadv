@@ -12,12 +12,10 @@
     <meta name="author" content="Buzin Solutions LTDA">
     <meta name="description"
         content="Advocacia especializada em direito civil, criminal, trabalhista e previdenciário. Atendimento rápido e personalizado. Fale conosco pelo WhatsApp.">
-
     <meta property="og:title" content="Dias & Kovaltchuk Advogados">
     <meta property="og:description" content="Atendimento jurídico especializado em diversas áreas do direito.">
     <meta property="og:image" content="https://diasekovaltchukadv.com/static/images/logo.png">
     <meta property="og:type" content="website">
-
     <link rel="canonical" href="https://diasekovaltchukadv.com/">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -25,17 +23,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260519-3">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-    <script src="{{ url_for('static', filename='js/scroll.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/mask.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/captcha.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scroll.js') }}?v=20260519-3"></script>
+    <script src="{{ url_for('static', filename='js/mask.js') }}?v=20260519-3"></script>
+    <script src="{{ url_for('static', filename='js/captcha.js') }}?v=20260519-3"></script>
 
     {% if CAPTCHA_ENABLED %}
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -86,160 +83,193 @@
 </head>
 
 <body>
-    <header class="site-header" id="home">
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top dk-nav" aria-label="Navegação principal">
-            <div class="container">
-                <a class="navbar-brand" href="#home" aria-label="Dias e Kovaltchuk Advogados">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Dias & Kovaltchuk Advogados">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Abrir menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto align-items-lg-center">
-                        <li class="nav-item"><a class="nav-link" href="#about">Quem somos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#acting">Atuação</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#team">Equipe</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact">Contato</a></li>
-                        <li class="nav-item nav-cta">
-                            <a class="btn btn-gold wa-track" href="https://wa.me/{{ WHATS_NUMBER }}">
-                                <i class="bi bi-whatsapp"></i>
-                                Atendimento
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <section class="hero">
-            <div class="hero-backdrop" aria-hidden="true"></div>
-            <div class="container hero-grid">
-                <div class="hero-copy">
-                    <span class="eyebrow">Advocacia estratégica em Florianópolis</span>
-                    <h1>Defesa técnica, presença humana e precisão em cada decisão.</h1>
-                    <p>
-                        Atuação contenciosa, preventiva e consultiva para pessoas que precisam de orientação clara,
-                        resposta rápida e condução jurídica firme.
-                    </p>
-                    <div class="hero-actions">
-                        <a class="btn btn-gold btn-lg wa-track" href="https://wa.me/{{ WHATS_NUMBER }}">
+    <nav class="navbar navbar-expand-lg fixed-top topbar" id="home" aria-label="Navegação principal">
+        <div class="container-fluid nav-shell">
+            <a class="navbar-brand" href="#home" aria-label="Dias e Kovaltchuk Advogados">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Dias & Kovaltchuk Advogados">
+                <span>Dias & Kovaltchuk</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Abrir menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="#about">Escritório</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#acting">Atuação</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#team">Advogadas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contato</a></li>
+                    <li class="nav-item">
+                        <a class="nav-button wa-track" href="https://wa.me/{{ WHATS_NUMBER }}">
                             <i class="bi bi-whatsapp"></i>
-                            Falar agora
+                            Falar com o escritório
                         </a>
-                        <a class="btn btn-ghost btn-lg" href="#acting">
-                            <i class="bi bi-arrow-down-right"></i>
-                            Ver áreas
-                        </a>
-                    </div>
-                </div>
-
-                <div class="hero-panel" aria-label="Principais diferenciais">
-                    <img src="{{ url_for('static', filename='images/justice.png') }}"
-                        alt="Dias & Kovaltchuk Advogadas Associadas" class="hero-mark">
-                    <div class="proof-strip">
-                        <div>
-                            <strong>2023</strong>
-                            <span>Sociedade fundada</span>
-                        </div>
-                        <div>
-                            <strong>7</strong>
-                            <span>Áreas de atuação</span>
-                        </div>
-                        <div>
-                            <strong>OAB/SC</strong>
-                            <span>Atuação regular</span>
-                        </div>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
-        </section>
-    </header>
+        </div>
+    </nav>
 
     <main>
-        <section class="section about-section" id="about">
-            <div class="container">
-                <div class="section-heading">
-                    <span class="eyebrow">Quem somos</span>
-                    <h2>Um escritório jovem, técnico e incansável na proteção dos seus direitos.</h2>
+        <section class="hero-section">
+            <div class="hero-media" aria-hidden="true">
+                <img src="{{ url_for('static', filename='images/equipe.jpg') }}" alt="">
+            </div>
+
+            <div class="container-fluid hero-shell">
+                <div class="hero-copy">
+                    <span class="kicker">Advocacia para momentos decisivos</span>
+                    <h1>Quando o problema é sério, sua defesa precisa parecer séria desde o primeiro contato.</h1>
+                    <p>
+                        A Dias & Kovaltchuk une análise técnica, resposta rápida e acompanhamento próximo para conduzir
+                        demandas criminais, cíveis, familiares, trabalhistas, previdenciárias, de saúde e consumidor.
+                    </p>
+                    <div class="hero-actions">
+                        <a class="primary-action wa-track" href="https://wa.me/{{ WHATS_NUMBER }}">
+                            <i class="bi bi-whatsapp"></i>
+                            Quero atendimento agora
+                        </a>
+                        <a class="secondary-action" href="#contact">
+                            Enviar meu caso
+                            <i class="bi bi-arrow-down"></i>
+                        </a>
+                    </div>
                 </div>
 
-                <div class="about-grid">
-                    <div class="about-image-wrap">
-                        <img src="{{ url_for('static', filename='images/equipe.jpg') }}" class="about-image"
-                            alt="Equipe Dias & Kovaltchuk">
+                <aside class="decision-card" aria-label="Atendimento jurídico">
+                    <div class="card-topline">
+                        <span>DK ADV</span>
+                        <strong>OAB/SC</strong>
                     </div>
-                    <div class="about-copy">
-                        <p>
-                            A Dias & Kovaltchuk é uma sociedade de advogadas fundada em 2023 por Larissa de Souza Dias,
-                            OAB/SC 62.170, e Vitória Igarçaba Kovaltchuk, OAB/SC 67.779.
-                        </p>
-                        <p>
-                            O escritório atua em demandas contenciosas, preventivas e consultivas nas áreas cível,
-                            criminal, consumerista, trabalhista e previdenciária, com atenção real ao detalhe, ética e
-                            comunicação transparente.
-                        </p>
-                        <div class="signature-row">
-                            <span>Qualidade</span>
-                            <span>Respeito</span>
-                            <span>Transparência</span>
-                        </div>
+                    <h2>Diagnóstico inicial com direção clara.</h2>
+                    <p>Você explica o cenário. O escritório aponta riscos, prioridades e próximos passos possíveis.</p>
+                    <div class="decision-list">
+                        <span><i class="bi bi-check2"></i> Atendimento humanizado</span>
+                        <span><i class="bi bi-check2"></i> Estratégia por área</span>
+                        <span><i class="bi bi-check2"></i> Comunicação objetiva</span>
                     </div>
+                </aside>
+            </div>
+
+            <div class="trust-strip" aria-label="Diferenciais do escritório">
+                <div>
+                    <strong>2023</strong>
+                    <span>Sociedade fundada em Florianópolis</span>
+                </div>
+                <div>
+                    <strong>7 áreas</strong>
+                    <span>Atuação completa para pessoas físicas</span>
+                </div>
+                <div>
+                    <strong>2 sócias</strong>
+                    <span>Condução direta por advogadas fundadoras</span>
                 </div>
             </div>
         </section>
 
-        <section class="section acting-section" id="acting">
+        <section class="section intro-section" id="about">
             <div class="container">
-                <div class="section-heading light">
-                    <span class="eyebrow">Áreas de atuação</span>
-                    <h2>Estratégia jurídica feita para resolver, prevenir e proteger.</h2>
+                <div class="split-heading">
+                    <span class="kicker">O escritório</span>
+                    <h2>Uma advocacia que combina postura firme com escuta cuidadosa.</h2>
+                    <p>
+                        Fundada por Larissa de Souza Dias, OAB/SC 62.170, e Vitória Igarçaba Kovaltchuk, OAB/SC 67.779,
+                        a Dias & Kovaltchuk atua de forma contenciosa, preventiva e consultiva com ética, transparência
+                        e atenção real ao detalhe.
+                    </p>
                 </div>
 
-                <div class="practice-grid">
-                    <article class="practice-card">
-                        <img src="{{ url_for('static', filename='images/1.png') }}" alt="">
-                        <h3>Direito Criminal</h3>
-                        <p>Defesa em crimes contra a vida, Tribunal do Júri, fase investigativa, processo penal,
-                            execução e instâncias comuns ou federais.</p>
+                <div class="value-grid">
+                    <article>
+                        <span>01</span>
+                        <h3>Clareza antes de qualquer movimento</h3>
+                        <p>Você entende o que está em jogo, quais caminhos existem e o que precisa ser feito primeiro.</p>
                     </article>
-                    <article class="practice-card">
+                    <article>
+                        <span>02</span>
+                        <h3>Estratégia ajustada ao caso</h3>
+                        <p>Cada demanda é tratada com leitura própria, sem respostas genéricas para problemas sensíveis.</p>
+                    </article>
+                    <article>
+                        <span>03</span>
+                        <h3>Presença durante o processo</h3>
+                        <p>Acompanhamento próximo, linguagem acessível e orientação para decisões com segurança.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section practice-section" id="acting">
+            <div class="container">
+                <div class="section-title">
+                    <span class="kicker">Áreas de atuação</span>
+                    <h2>Um escritório preparado para proteger o que não pode esperar.</h2>
+                </div>
+
+                <div class="practice-board">
+                    <article class="practice-tile large">
+                        <img src="{{ url_for('static', filename='images/1.png') }}" alt="">
+                        <span>Tribunal do Júri, investigação e processo penal</span>
+                        <h3>Direito Criminal</h3>
+                        <p>Defesa técnica em crimes contra a vida, inquéritos, processos, execução penal e instâncias
+                            comuns ou federais.</p>
+                    </article>
+                    <article class="practice-tile">
                         <img src="{{ url_for('static', filename='images/2.png') }}" alt="">
                         <h3>Direito Civil</h3>
-                        <p>Cobranças, busca e apreensão, execução de títulos, responsabilidade civil, obrigações,
-                            contratos, posse, propriedade e usucapião.</p>
+                        <p>Cobranças, contratos, responsabilidade civil, obrigações, posse, propriedade e usucapião.</p>
                     </article>
-                    <article class="practice-card">
+                    <article class="practice-tile">
                         <img src="{{ url_for('static', filename='images/3.png') }}" alt="">
                         <h3>Família e Sucessões</h3>
-                        <p>Divórcio, partilha, união estável, alimentos, guarda, investigação de paternidade,
-                            planejamento sucessório e inventários.</p>
+                        <p>Divórcio, partilha, união estável, alimentos, guarda, paternidade e inventários.</p>
                     </article>
-                    <article class="practice-card">
+                    <article class="practice-tile">
                         <img src="{{ url_for('static', filename='images/4.png') }}" alt="">
                         <h3>Direito à Saúde</h3>
-                        <p>Responsabilidade civil médica, planos de saúde, medicamentos, demandas urgentes e pedidos
-                            liminares perante a Fazenda Pública.</p>
+                        <p>Planos de saúde, medicamentos, responsabilidade médica e pedidos liminares urgentes.</p>
                     </article>
-                    <article class="practice-card">
+                    <article class="practice-tile">
                         <img src="{{ url_for('static', filename='images/5.png') }}" alt="">
                         <h3>Consumidor</h3>
-                        <p>Ações, defesas e acompanhamento perante Procon, Delegacias do Consumidor, Ministério Público,
-                            Juizados Especiais e Justiça Comum.</p>
+                        <p>Ações, defesas e acompanhamento no Procon, Ministério Público, Juizados e Justiça Comum.</p>
                     </article>
-                    <article class="practice-card">
+                    <article class="practice-tile">
                         <img src="{{ url_for('static', filename='images/6.png') }}" alt="">
                         <h3>Trabalhista</h3>
-                        <p>Processos individuais e coletivos, indenizações por acidente de trabalho, audiências,
-                            acordos e acompanhamento estratégico.</p>
+                        <p>Processos individuais e coletivos, audiências, acordos e indenizações por acidente laboral.</p>
                     </article>
-                    <article class="practice-card featured">
+                    <article class="practice-tile">
                         <img src="{{ url_for('static', filename='images/7.png') }}" alt="">
                         <h3>Previdenciário</h3>
-                        <p>Aposentadorias, pensões, auxílio-doença, revisões, benefícios e conversões para aposentadoria
-                            por invalidez.</p>
+                        <p>Aposentadorias, pensões, auxílio-doença, revisões e conversão de benefícios.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section process-section">
+            <div class="container process-grid">
+                <div>
+                    <span class="kicker">Como funciona</span>
+                    <h2>Você não fica no escuro.</h2>
+                </div>
+                <div class="process-steps">
+                    <article>
+                        <strong>1</strong>
+                        <h3>Contato inicial</h3>
+                        <p>Você envia a situação pelo WhatsApp ou formulário com os dados essenciais.</p>
+                    </article>
+                    <article>
+                        <strong>2</strong>
+                        <h3>Análise do cenário</h3>
+                        <p>O escritório identifica urgências, riscos, documentos e medidas possíveis.</p>
+                    </article>
+                    <article>
+                        <strong>3</strong>
+                        <h3>Plano de ação</h3>
+                        <p>Você recebe uma orientação clara para decidir os próximos passos com segurança.</p>
                     </article>
                 </div>
             </div>
@@ -247,17 +277,17 @@
 
         <section class="section team-section" id="team">
             <div class="container">
-                <div class="section-heading">
-                    <span class="eyebrow">Equipe</span>
-                    <h2>Sócias-fundadoras à frente da estratégia e do acompanhamento.</h2>
+                <div class="section-title">
+                    <span class="kicker">Advogadas</span>
+                    <h2>Duas sócias, uma condução direta e responsável.</h2>
                 </div>
 
-                <div class="team-grid">
-                    <article class="lawyer-profile">
+                <div class="team-showcase">
+                    <article class="profile-card">
                         <img src="{{ url_for('static', filename='images/larry.jpg') }}"
                             alt="Dra. Larissa de Souza Dias">
                         <div>
-                            <span class="profile-role">Sócia-fundadora</span>
+                            <span>Sócia-fundadora</span>
                             <h3>Dra. Larissa de Souza Dias</h3>
                             <p>
                                 Bacharela em Direito pela Faculdade Cesusc, inscrita na OAB/SC 62.170, especialista em
@@ -266,12 +296,11 @@
                             </p>
                         </div>
                     </article>
-
-                    <article class="lawyer-profile">
+                    <article class="profile-card">
                         <img src="{{ url_for('static', filename='images/vik.jpg') }}"
                             alt="Dra. Vitória Igarçaba Kovaltchuk">
                         <div>
-                            <span class="profile-role">Sócia-fundadora</span>
+                            <span>Sócia-fundadora</span>
                             <h3>Dra. Vitória Igarçaba Kovaltchuk</h3>
                             <p>
                                 Bacharela em Direito pela Universidade do Sul de Santa Catarina, inscrita na OAB/SC
@@ -285,16 +314,15 @@
         </section>
 
         <section class="contact-section" id="contact">
-            <div class="container contact-grid">
-                <div class="contact-copy">
-                    <span class="eyebrow">Contato</span>
-                    <h2>Conte o que aconteceu. O próximo passo começa com uma conversa.</h2>
+            <div class="container contact-layout">
+                <div class="contact-panel">
+                    <span class="kicker">Contato</span>
+                    <h2>Pronta para entender seu caso?</h2>
                     <p>
-                        Envie sua mensagem pelo formulário ou fale diretamente pelo WhatsApp. O atendimento é objetivo,
-                        cuidadoso e orientado ao que seu caso precisa agora.
+                        Fale com a Dias & Kovaltchuk e receba uma orientação inicial sobre riscos, urgências e caminhos
+                        possíveis.
                     </p>
-
-                    <div class="contact-links">
+                    <div class="contact-methods">
                         <a href="mailto:{{ CONTACT_EMAIL }}">
                             <i class="bi bi-envelope"></i>
                             {{ CONTACT_EMAIL }}
@@ -304,8 +332,7 @@
                             <span class="phone" data-phone="{{ WHATS_NUMBER }}"></span>
                         </a>
                     </div>
-
-                    <div class="social-row" aria-label="Redes sociais">
+                    <div class="social-row">
                         <a href="{{ SOCIAL_FB_URL }}" target="_blank" rel="noopener" aria-label="Facebook">
                             <i class="bi bi-facebook"></i>
                         </a>
@@ -318,7 +345,7 @@
                     </div>
                 </div>
 
-                <div class="contact-form-wrap">
+                <div class="form-panel">
                     {% with messages = get_flashed_messages(with_categories=True) %}
                     {% if messages %}
                     {% set category, msg = (messages|last) %}
@@ -331,23 +358,24 @@
                     {% endwith %}
 
                     <form action="/send" method="POST" class="contact-form">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="name" placeholder="Fulano da Silva" name="nome"
-                                required>
-                            <label for="name">Nome</label>
+                        <div class="field-grid">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="name" placeholder="Fulano da Silva"
+                                    name="nome" required>
+                                <label for="name">Nome</label>
+                            </div>
+                            <div class="form-floating">
+                                <input type="tel" class="form-control" id="tel" name="telefone"
+                                    placeholder="(48) 99999-9999" pattern="\(\d{2}\)\s\d{4,5}-\d{4}" autocomplete="tel"
+                                    inputmode="tel" required>
+                                <label for="tel">Telefone</label>
+                            </div>
                         </div>
 
                         <div class="form-floating">
                             <input type="email" class="form-control" id="email" placeholder="name@example.com"
                                 name="email" required>
                             <label for="email">Email</label>
-                        </div>
-
-                        <div class="form-floating">
-                            <input type="tel" class="form-control" id="tel" name="telefone"
-                                placeholder="(48) 99999-9999" pattern="\(\d{2}\)\s\d{4,5}-\d{4}" autocomplete="tel"
-                                inputmode="tel" required>
-                            <label for="tel">Telefone</label>
                         </div>
 
                         <div class="form-floating">
@@ -359,7 +387,7 @@
                         <div class="form-floating">
                             <textarea class="form-control" id="message" name="mensagem" placeholder="Mensagem"
                                 required></textarea>
-                            <label for="message">Mensagem</label>
+                            <label for="message">Resumo do caso</label>
                         </div>
 
                         <div class="visually-hidden" aria-hidden="true">
@@ -374,7 +402,6 @@
                                 data-error-callback="onTurnstileError">
                             </div>
                         </div>
-
                         <noscript>
                             <div class="alert alert-warning mt-2">
                                 Ative o JavaScript para concluir a verificação e enviar o formulário.
@@ -382,9 +409,9 @@
                         </noscript>
                         {% endif %}
 
-                        <button id="submitBtn" class="btn btn-gold send" {% if CAPTCHA_ENABLED %}disabled{% endif %}>
+                        <button id="submitBtn" class="send-button" {% if CAPTCHA_ENABLED %}disabled{% endif %}>
+                            Enviar para análise
                             <i class="bi bi-send"></i>
-                            Enviar mensagem
                         </button>
                     </form>
                 </div>
