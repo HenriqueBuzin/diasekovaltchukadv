@@ -745,6 +745,13 @@ textarea.form-control {
 .turnstile-wrap {
     display: flex;
     justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    padding: 2px 0;
+}
+
+.turnstile-wrap .cf-turnstile {
+    max-width: 100%;
 }
 
 .send-button {
@@ -929,6 +936,11 @@ textarea.form-control {
         max-width: 100%;
         overflow-wrap: anywhere;
         word-break: break-word;
+    }
+
+    .turnstile-wrap {
+        justify-content: flex-start;
+        padding: 2px 0;
     }
 
     .floating-whatsapp {
