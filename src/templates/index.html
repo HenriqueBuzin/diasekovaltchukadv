@@ -26,13 +26,13 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260519-3">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260519-4">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scroll.js') }}?v=20260519-3"></script>
-    <script src="{{ url_for('static', filename='js/mask.js') }}?v=20260519-3"></script>
-    <script src="{{ url_for('static', filename='js/captcha.js') }}?v=20260519-3"></script>
+    <script src="{{ url_for('static', filename='js/scroll.js') }}?v=20260519-4"></script>
+    <script src="{{ url_for('static', filename='js/mask.js') }}?v=20260519-4"></script>
+    <script src="{{ url_for('static', filename='js/captcha.js') }}?v=20260519-4"></script>
 
     {% if CAPTCHA_ENABLED %}
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -209,39 +209,39 @@
 
                 <div class="practice-board">
                     <article class="practice-tile large">
-                        <img src="{{ url_for('static', filename='images/1.png') }}" alt="">
+                        <i class="bi bi-shield-lock practice-icon" aria-hidden="true"></i>
                         <span>Tribunal do Júri, investigação e processo penal</span>
                         <h3>Direito Criminal</h3>
                         <p>Defesa técnica em crimes contra a vida, inquéritos, processos, execução penal e instâncias
                             comuns ou federais.</p>
                     </article>
                     <article class="practice-tile">
-                        <img src="{{ url_for('static', filename='images/2.png') }}" alt="">
+                        <i class="bi bi-file-earmark-text practice-icon" aria-hidden="true"></i>
                         <h3>Direito Civil</h3>
                         <p>Cobranças, contratos, responsabilidade civil, obrigações, posse, propriedade e usucapião.</p>
                     </article>
                     <article class="practice-tile">
-                        <img src="{{ url_for('static', filename='images/3.png') }}" alt="">
+                        <i class="bi bi-people practice-icon" aria-hidden="true"></i>
                         <h3>Família e Sucessões</h3>
                         <p>Divórcio, partilha, união estável, alimentos, guarda, paternidade e inventários.</p>
                     </article>
                     <article class="practice-tile">
-                        <img src="{{ url_for('static', filename='images/4.png') }}" alt="">
+                        <i class="bi bi-heart-pulse practice-icon" aria-hidden="true"></i>
                         <h3>Direito à Saúde</h3>
                         <p>Planos de saúde, medicamentos, responsabilidade médica e pedidos liminares urgentes.</p>
                     </article>
                     <article class="practice-tile">
-                        <img src="{{ url_for('static', filename='images/5.png') }}" alt="">
+                        <i class="bi bi-bag-check practice-icon" aria-hidden="true"></i>
                         <h3>Consumidor</h3>
                         <p>Ações, defesas e acompanhamento no Procon, Ministério Público, Juizados e Justiça Comum.</p>
                     </article>
                     <article class="practice-tile">
-                        <img src="{{ url_for('static', filename='images/6.png') }}" alt="">
+                        <i class="bi bi-briefcase practice-icon" aria-hidden="true"></i>
                         <h3>Trabalhista</h3>
                         <p>Processos individuais e coletivos, audiências, acordos e indenizações por acidente laboral.</p>
                     </article>
                     <article class="practice-tile">
-                        <img src="{{ url_for('static', filename='images/7.png') }}" alt="">
+                        <i class="bi bi-clipboard2-check practice-icon" aria-hidden="true"></i>
                         <h3>Previdenciário</h3>
                         <p>Aposentadorias, pensões, auxílio-doença, revisões e conversão de benefícios.</p>
                     </article>
