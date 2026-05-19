@@ -7,6 +7,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 import requests
 
 import os
+import re
 
 def require_env(name: str) -> str:
     val = os.getenv(name)
@@ -17,6 +18,9 @@ def require_env(name: str) -> str:
 def parse_bool_env(name: str) -> bool:
     val = require_env(name)
     return val.strip().lower() in ("1", "true", "t", "yes", "y")
+
+def only_digits(value: str) -> str:
+    return re.sub(r"\D", "", value)
 
 app = Flask(__name__)
 app.secret_key = require_env("FLASK_SECRET_KEY")
@@ -46,6 +50,7 @@ mail = Mail(app)
 
 CONTACT_EMAIL = require_env("CONTACT_EMAIL")
 WHATS_NUMBER  = require_env("WHATS_NUMBER")
+WHATS_LINK_NUMBER = only_digits(WHATS_NUMBER)
 SOCIAL_FB_URL = require_env("SOCIAL_FB_URL")
 SOCIAL_IG_URL = require_env("SOCIAL_IG_URL")
 
@@ -93,6 +98,7 @@ def index():
         "index.html",
         CONTACT_EMAIL=CONTACT_EMAIL,
         WHATS_NUMBER=WHATS_NUMBER,
+        WHATS_LINK_NUMBER=WHATS_LINK_NUMBER,
         SOCIAL_FB_URL=SOCIAL_FB_URL,
         SOCIAL_IG_URL=SOCIAL_IG_URL,
         CAPTCHA_ENABLED=CAPTCHA_ENABLED,
