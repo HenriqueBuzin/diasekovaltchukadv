@@ -5,17 +5,35 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dias & Kovaltchuk Adv</title>
+    <title>Dias Kovaltchuk Advogadas Associadas | Advocacia em Florianópolis</title>
 
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 
-    <meta name="author" content="Buzin Solutions LTDA">
+    <meta name="author" content="Dias Kovaltchuk Advogadas Associadas">
     <meta name="description"
-        content="Advocacia especializada em direito civil, criminal, trabalhista e previdenciário. Atendimento rápido e personalizado. Fale conosco pelo WhatsApp.">
-    <meta property="og:title" content="Dias & Kovaltchuk Advogados">
-    <meta property="og:description" content="Atendimento jurídico especializado em diversas áreas do direito.">
+        content="Advogadas em Florianópolis com atuação em direito criminal, civil, família, saúde, consumidor, trabalhista e previdenciário. Fale com o escritório.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#0d0f14">
+    <meta name="geo.region" content="BR-SC">
+    <meta name="geo.placename" content="Florianópolis">
+    <meta name="keywords"
+        content="advogadas em Florianópolis, advocacia criminal Florianópolis, direito civil, direito de família, direito previdenciário, direito trabalhista, direito do consumidor, direito à saúde">
+
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Dias Kovaltchuk Advogadas Associadas">
+    <meta property="og:title" content="Dias Kovaltchuk Advogadas Associadas | Advocacia em Florianópolis">
+    <meta property="og:description"
+        content="Atendimento jurídico estratégico em Florianópolis nas áreas criminal, cível, família, saúde, consumidor, trabalhista e previdenciária.">
     <meta property="og:image" content="https://diasekovaltchukadv.com/static/images/logo.png">
+    <meta property="og:url" content="https://diasekovaltchukadv.com/">
     <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dias Kovaltchuk Advogadas Associadas">
+    <meta name="twitter:description"
+        content="Advocacia em Florianópolis com atendimento próximo, técnico e estratégico.">
+    <meta name="twitter:image" content="https://diasekovaltchukadv.com/static/images/logo.png">
+
     <link rel="canonical" href="https://diasekovaltchukadv.com/">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,13 +44,13 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260519-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260519-10">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scroll.js') }}?v=20260519-8"></script>
-    <script src="{{ url_for('static', filename='js/mask.js') }}?v=20260519-8"></script>
-    <script src="{{ url_for('static', filename='js/captcha.js') }}?v=20260519-8"></script>
+    <script src="{{ url_for('static', filename='js/scroll.js') }}?v=20260519-10"></script>
+    <script src="{{ url_for('static', filename='js/mask.js') }}?v=20260519-10"></script>
+    <script src="{{ url_for('static', filename='js/captcha.js') }}?v=20260519-10"></script>
 
     {% if CAPTCHA_ENABLED %}
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -50,12 +68,20 @@
     {
         "@context": "https://schema.org",
         "@type": "LegalService",
-        "name": "Dias & Kovaltchuk Advogados",
+        "name": "Dias Kovaltchuk Advogadas Associadas",
+        "alternateName": "Dias & Kovaltchuk Advogados",
+        "description": "Advocacia em Florianópolis com atuação em direito criminal, civil, família e sucessões, saúde, consumidor, trabalhista e previdenciário.",
         "url": "https://diasekovaltchukadv.com/",
+        "image": "https://diasekovaltchukadv.com/static/images/logo.png",
+        "logo": "https://diasekovaltchukadv.com/static/images/logo.png",
         "telephone": "+{{ WHATS_LINK_NUMBER }}",
+        "email": "{{ CONTACT_EMAIL }}",
+        "priceRange": "$$",
         "areaServed": {
             "@type": "City",
-            "name": "Florianópolis"
+            "name": "Florianópolis",
+            "addressRegion": "SC",
+            "addressCountry": "BR"
         },
         "address": {
             "@type": "PostalAddress",
@@ -63,6 +89,29 @@
             "addressRegion": "SC",
             "addressCountry": "BR"
         },
+        "founder": [
+            {
+                "@type": "Person",
+                "name": "Larissa de Souza Dias",
+                "jobTitle": "Advogada",
+                "identifier": "OAB/SC 62.170"
+            },
+            {
+                "@type": "Person",
+                "name": "Vitória Igarçaba Kovaltchuk",
+                "jobTitle": "Advogada",
+                "identifier": "OAB/SC 67.779"
+            }
+        ],
+        "knowsAbout": [
+            "Direito Criminal",
+            "Direito Civil",
+            "Direito de Família e Sucessões",
+            "Direito à Saúde",
+            "Direito do Consumidor",
+            "Direito Trabalhista",
+            "Direito Previdenciário"
+        ],
         "sameAs": [
             "{{ SOCIAL_FB_URL }}",
             "{{ SOCIAL_IG_URL }}"
