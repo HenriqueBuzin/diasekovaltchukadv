@@ -746,11 +746,12 @@ textarea.form-control {
     display: flex;
     justify-content: center;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     padding: 2px 0;
 }
 
 .turnstile-wrap .cf-turnstile {
+    width: 300px;
     max-width: 100%;
 }
 
@@ -892,9 +893,12 @@ textarea.form-control {
     }
 
     .decision-card,
-    .contact-panel,
-    .form-panel {
+    .contact-panel {
         padding: 24px;
+    }
+
+    .form-panel {
+        padding: 20px;
     }
 
     .contact-layout {
@@ -939,7 +943,7 @@ textarea.form-control {
     }
 
     .turnstile-wrap {
-        justify-content: flex-start;
+        justify-content: center;
         padding: 2px 0;
     }
 
