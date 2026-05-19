@@ -409,7 +409,6 @@ a {
     color: var(--paper);
     background:
         linear-gradient(180deg, rgba(13, 15, 20, 0.94), rgba(13, 15, 20, 0.98)),
-        url("../images/justice.png") right 5% top 70px / min(42vw, 560px) no-repeat,
         var(--night);
 }
 
