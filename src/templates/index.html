@@ -5,25 +5,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dias Kovaltchuk Advogadas Associadas | Advocacia em Florianópolis</title>
+    <title>Dias Kovaltchuk Advogadas Associadas</title>
 
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 
     <meta name="author" content="Dias Kovaltchuk Advogadas Associadas">
     <meta name="description"
-        content="Advogadas em Florianópolis com atuação em direito criminal, civil, família, saúde, consumidor, trabalhista e previdenciário. Fale com o escritório.">
+        content="Advogadas com atendimento online e atuação em direito criminal, civil, família, saúde, consumidor, trabalhista e previdenciário. Fale com o escritório.">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="theme-color" content="#0d0f14">
-    <meta name="geo.region" content="BR-SC">
-    <meta name="geo.placename" content="Florianópolis">
     <meta name="keywords"
-        content="advogadas em Florianópolis, advocacia criminal Florianópolis, direito civil, direito de família, direito previdenciário, direito trabalhista, direito do consumidor, direito à saúde">
+        content="advogadas online, advocacia online, advocacia criminal, direito civil, direito de família, direito previdenciário, direito trabalhista, direito do consumidor, direito à saúde">
 
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="Dias Kovaltchuk Advogadas Associadas">
-    <meta property="og:title" content="Dias Kovaltchuk Advogadas Associadas | Advocacia em Florianópolis">
+    <meta property="og:title" content="Dias Kovaltchuk Advogadas Associadas">
     <meta property="og:description"
-        content="Atendimento jurídico estratégico em Florianópolis nas áreas criminal, cível, família, saúde, consumidor, trabalhista e previdenciária.">
+        content="Atendimento jurídico estratégico online nas áreas criminal, cível, família, saúde, consumidor, trabalhista e previdenciária.">
     <meta property="og:image" content="https://diasekovaltchukadv.com/static/images/logo.png">
     <meta property="og:url" content="https://diasekovaltchukadv.com/">
     <meta property="og:type" content="website">
@@ -31,7 +29,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Dias Kovaltchuk Advogadas Associadas">
     <meta name="twitter:description"
-        content="Advocacia em Florianópolis com atendimento próximo, técnico e estratégico.">
+        content="Advocacia com atendimento online, próximo, técnico e estratégico.">
     <meta name="twitter:image" content="https://diasekovaltchukadv.com/static/images/logo.png">
 
     <link rel="canonical" href="https://diasekovaltchukadv.com/">
@@ -70,19 +68,23 @@
         "@type": "LegalService",
         "name": "Dias Kovaltchuk Advogadas Associadas",
         "alternateName": "Dias & Kovaltchuk Advogados",
-        "description": "Advocacia em Florianópolis com atuação em direito criminal, civil, família e sucessões, saúde, consumidor, trabalhista e previdenciário.",
+        "description": "Advocacia com atendimento online e atuação em direito criminal, civil, família e sucessões, saúde, consumidor, trabalhista e previdenciário.",
         "url": "https://diasekovaltchukadv.com/",
         "image": "https://diasekovaltchukadv.com/static/images/logo.png",
         "logo": "https://diasekovaltchukadv.com/static/images/logo.png",
         "telephone": "+{{ WHATS_LINK_NUMBER }}",
         "email": "{{ CONTACT_EMAIL }}",
         "priceRange": "$$",
-        "areaServed": {
-            "@type": "City",
-            "name": "Florianópolis",
-            "addressRegion": "SC",
-            "addressCountry": "BR"
-        },
+        "areaServed": [
+            {
+                "@type": "Country",
+                "name": "Brasil"
+            },
+            {
+                "@type": "State",
+                "name": "Santa Catarina"
+            }
+        ],
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "Florianópolis",
@@ -204,7 +206,7 @@
             <div class="trust-strip" aria-label="Diferenciais do escritório">
                 <div>
                     <strong>2023</strong>
-                    <span>Sociedade fundada em Florianópolis</span>
+                    <span>Atendimento online e estratégico</span>
                 </div>
                 <div>
                     <strong>7 áreas</strong>
