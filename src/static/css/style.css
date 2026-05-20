@@ -734,6 +734,19 @@ a {
     box-shadow: 0 0 0 0.2rem rgba(210, 187, 101, 0.22);
 }
 
+.form-control.is-invalid {
+    border-color: #b4232f;
+    box-shadow: 0 0 0 0.16rem rgba(180, 35, 47, 0.12);
+}
+
+.field-error {
+    min-height: 20px;
+    margin-top: 6px;
+    color: #b4232f;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
 .form-floating label {
     color: #6f675e;
 }

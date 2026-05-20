@@ -22,6 +22,26 @@ def parse_bool_env(name: str) -> bool:
 def only_digits(value: str) -> str:
     return re.sub(r"\D", "", value)
 
+def is_valid_email(value: str) -> bool:
+    return bool(re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]{2,}", value))
+
+def validate_contact(form_contato: "Contato") -> list[str]:
+    errors = []
+    phone_digits = only_digits(form_contato.telefone)
+
+    if len(form_contato.nome) < 3:
+        errors.append("Informe seu nome completo.")
+    if not is_valid_email(form_contato.email):
+        errors.append("Informe um e-mail válido.")
+    if len(phone_digits) not in (10, 11):
+        errors.append("Informe um telefone válido com DDD.")
+    if len(form_contato.assunto) < 3:
+        errors.append("Informe o assunto.")
+    if len(form_contato.mensagem) < 10:
+        errors.append("Escreva um resumo do caso com pelo menos 10 caracteres.")
+
+    return errors
+
 app = Flask(__name__)
 app.secret_key = require_env("FLASK_SECRET_KEY")
 
@@ -120,6 +140,11 @@ def send():
     if request.form.get("website"):
         app.logger.warning("Honeypot acionado no formulário de contato.")
         flash("Não foi possível enviar a mensagem. Tente novamente.", "danger")
+        return redirect(url_for("index") + "#contact")
+
+    validation_errors = validate_contact(formContato)
+    if validation_errors:
+        flash(" ".join(validation_errors), "danger")
         return redirect(url_for("index") + "#contact")
 
     # 2) CAPTCHA: valida o token do Cloudflare Turnstile (se habilitado)
