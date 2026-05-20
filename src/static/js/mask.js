@@ -27,6 +27,55 @@ document.addEventListener('DOMContentLoaded', function () {
   const tel = document.getElementById('tel');
   let lastDigits = '';
 
+  const validators = {
+    name: function (value) {
+      if (!value.trim()) return 'Informe seu nome.';
+      if (value.trim().length < 3) return 'Informe pelo menos 3 caracteres.';
+      return '';
+    },
+    email: function (value) {
+      const email = value.trim();
+      if (!email) return 'Informe seu e-mail.';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return 'Informe um e-mail válido.';
+      return '';
+    },
+    tel: function (value) {
+      const digits = value.replace(/\D/g, '');
+      if (!digits) return 'Informe seu telefone.';
+      if (digits.length !== 10 && digits.length !== 11) return 'Use DDD + telefone com 10 ou 11 dígitos.';
+      return '';
+    },
+    subject: function (value) {
+      if (!value.trim()) return 'Informe o assunto.';
+      if (value.trim().length < 3) return 'Descreva melhor o assunto.';
+      return '';
+    },
+    message: function (value) {
+      if (!value.trim()) return 'Escreva um resumo do caso.';
+      if (value.trim().length < 10) return 'Escreva pelo menos 10 caracteres.';
+      return '';
+    }
+  };
+
+  function setFieldError(field, message) {
+    const error = document.querySelector(`[data-error-for="${field.id}"]`);
+    field.classList.toggle('is-invalid', Boolean(message));
+    field.setAttribute('aria-invalid', message ? 'true' : 'false');
+
+    if (error) {
+      error.textContent = message;
+    }
+  }
+
+  function validateField(field) {
+    const validator = validators[field.id];
+    if (!validator) return true;
+
+    const message = validator(field.value);
+    setFieldError(field, message);
+    return !message;
+  }
+
   if (tel) {
     function onInput(e) {
       let raw = tel.value.replace(/\D/g, '');
@@ -98,14 +147,28 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   document.querySelectorAll('form').forEach(function (form) {
+    form.querySelectorAll('#name, #email, #tel, #subject, #message').forEach(function (field) {
+      field.addEventListener('blur', function () {
+        validateField(field);
+      });
+
+      field.addEventListener('input', function () {
+        if (field.classList.contains('is-invalid')) {
+          validateField(field);
+        }
+      });
+    });
+
     form.addEventListener('submit', function (e) {
-      if (!tel) return;
+      const fields = Array.from(form.querySelectorAll('#name, #email, #tel, #subject, #message'));
+      const isValid = fields.map(validateField).every(Boolean);
 
-      const digits = tel.value.replace(/\D/g, '');
-
-      if (digits.length !== 10 && digits.length !== 11) {
-        alert('Telefone inválido. Use 10 ou 11 dígitos.');
+      if (!isValid) {
         e.preventDefault();
+        const firstInvalid = form.querySelector('.is-invalid');
+        if (firstInvalid) {
+          firstInvalid.focus();
+        }
       }
     });
   });
