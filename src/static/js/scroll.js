@@ -1,13 +1,18 @@
 /* src/static/js/scroll.js */
 
-// navegação suave pelos anchors do menu
-$(function () {
-  $('.nav-item a[href^="#"]').on('click', function (e) {
-    e.preventDefault();
-    var id = $(this).attr('href');
-    var $target = $(id);
-    if ($target.length) {
-      $('html, body').animate({ scrollTop: $target.offset().top - 100 }, 500);
-    }
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.nav-item a[href^="#"]').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (!target) return;
+
+      event.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      const menu = document.getElementById('navbarSupportedContent');
+      if (menu && menu.classList.contains('show') && window.bootstrap) {
+        window.bootstrap.Collapse.getOrCreateInstance(menu).hide();
+      }
+    });
   });
 });
