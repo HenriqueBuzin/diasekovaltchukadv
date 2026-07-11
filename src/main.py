@@ -40,6 +40,19 @@ def is_valid_email(value: str) -> bool:
     return bool(EMAIL_PATTERN.fullmatch(value))
 
 
+def parse_recipients(value: str) -> list[str]:
+    recipients = [email.strip() for email in value.split(",") if email.strip()]
+    if not recipients:
+        raise RuntimeError("CONTACT_TO não contém nenhum e-mail válido.")
+    return recipients
+
+
+def load_turnstile_config(enabled: bool) -> tuple[str, str]:
+    if not enabled:
+        return "", ""
+    return require_env("TURNSTILE_SITE_KEY"), require_env("TURNSTILE_SECRET_KEY")
+
+
 @dataclass(frozen=True)
 class Contato:
     nome: str
@@ -111,12 +124,9 @@ SOCIAL_IG_URL = require_env("SOCIAL_IG_URL")
 ASSET_VERSION = os.getenv("ASSET_VERSION", "20260711")
 
 CAPTCHA_ENABLED = parse_bool_env("CAPTCHA_ENABLED")
-TURNSTILE_SITE_KEY = require_env("TURNSTILE_SITE_KEY") if CAPTCHA_ENABLED else ""
-TURNSTILE_SECRET_KEY = require_env("TURNSTILE_SECRET_KEY") if CAPTCHA_ENABLED else ""
+TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY = load_turnstile_config(CAPTCHA_ENABLED)
 
-RECIPIENTS = [email.strip() for email in require_env("CONTACT_TO").split(",") if email.strip()]
-if not RECIPIENTS:
-    raise RuntimeError("CONTACT_TO não contém nenhum e-mail válido.")
+RECIPIENTS = parse_recipients(require_env("CONTACT_TO"))
 
 
 def verify_turnstile(token: str, remote_ip: str | None) -> bool:
