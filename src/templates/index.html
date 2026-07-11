@@ -42,13 +42,12 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260520-1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=ASSET_VERSION) }}">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scroll.js') }}?v=20260520-1"></script>
-    <script src="{{ url_for('static', filename='js/mask.js') }}?v=20260520-1"></script>
-    <script src="{{ url_for('static', filename='js/captcha.js') }}?v=20260520-1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="{{ url_for('static', filename='js/scroll.js', v=ASSET_VERSION) }}" defer></script>
+    <script src="{{ url_for('static', filename='js/mask.js', v=ASSET_VERSION) }}" defer></script>
+    <script src="{{ url_for('static', filename='js/captcha.js', v=ASSET_VERSION) }}" defer></script>
 
     {% if CAPTCHA_ENABLED %}
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -137,7 +136,8 @@
     <nav class="navbar navbar-expand-lg fixed-top topbar" id="home" aria-label="Navegação principal">
         <div class="container-fluid nav-shell">
             <a class="navbar-brand" href="#home" aria-label="Dias e Kovaltchuk Advogados">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Dias & Kovaltchuk Advogados">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Dias & Kovaltchuk Advogados"
+                    decoding="async">
                 <span>Dias & Kovaltchuk</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -165,7 +165,8 @@
     <main>
         <section class="hero-section">
             <div class="hero-media" aria-hidden="true">
-                <img src="{{ url_for('static', filename='images/equipe.jpg') }}" alt="">
+                <img src="{{ url_for('static', filename='images/equipe.jpg') }}" alt="" fetchpriority="high"
+                    decoding="async">
             </div>
 
             <div class="container-fluid hero-shell">
@@ -336,7 +337,7 @@
                 <div class="team-showcase">
                     <article class="profile-card">
                         <img src="{{ url_for('static', filename='images/larry.jpg') }}"
-                            alt="Dra. Larissa de Souza Dias">
+                            alt="Dra. Larissa de Souza Dias" loading="lazy" decoding="async">
                         <div>
                             <span>Sócia-fundadora</span>
                             <h3>Dra. Larissa de Souza Dias</h3>
@@ -349,7 +350,7 @@
                     </article>
                     <article class="profile-card">
                         <img src="{{ url_for('static', filename='images/vik.jpg') }}"
-                            alt="Dra. Vitória Igarçaba Kovaltchuk">
+                            alt="Dra. Vitória Igarçaba Kovaltchuk" loading="lazy" decoding="async">
                         <div>
                             <span>Sócia-fundadora</span>
                             <h3>Dra. Vitória Igarçaba Kovaltchuk</h3>
@@ -408,42 +409,44 @@
                     {% endif %}
                     {% endwith %}
 
-                    <form action="/send" method="POST" class="contact-form" novalidate>
+                    <form action="{{ url_for('send') }}" method="POST" class="contact-form" novalidate>
                         <div class="field-grid">
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="name" placeholder="Fulano da Silva"
-                                    name="nome" minlength="3" maxlength="120" autocomplete="name" required>
+                                    name="nome" minlength="3" maxlength="120" autocomplete="name"
+                                    aria-describedby="name-error" required>
                                 <label for="name">Nome</label>
-                                <div class="field-error" data-error-for="name"></div>
+                                <div class="field-error" id="name-error" data-error-for="name" aria-live="polite"></div>
                             </div>
                             <div class="form-floating">
                                 <input type="tel" class="form-control" id="tel" name="telefone"
                                     placeholder="(48) 99999-9999" pattern="\(\d{2}\)\s\d{4,5}-\d{4}" autocomplete="tel"
-                                    inputmode="tel" required>
+                                    inputmode="tel" aria-describedby="tel-error" required>
                                 <label for="tel">Telefone</label>
-                                <div class="field-error" data-error-for="tel"></div>
+                                <div class="field-error" id="tel-error" data-error-for="tel" aria-live="polite"></div>
                             </div>
                         </div>
 
                         <div class="form-floating">
                             <input type="email" class="form-control" id="email" placeholder="name@example.com"
-                                name="email" maxlength="160" autocomplete="email" required>
+                                name="email" maxlength="160" autocomplete="email" aria-describedby="email-error"
+                                required>
                             <label for="email">Email</label>
-                            <div class="field-error" data-error-for="email"></div>
+                            <div class="field-error" id="email-error" data-error-for="email" aria-live="polite"></div>
                         </div>
 
                         <div class="form-floating">
                             <input type="text" class="form-control" id="subject" name="assunto" placeholder="Assunto"
-                                minlength="3" maxlength="160" required>
+                                minlength="3" maxlength="160" aria-describedby="subject-error" required>
                             <label for="subject">Assunto</label>
-                            <div class="field-error" data-error-for="subject"></div>
+                            <div class="field-error" id="subject-error" data-error-for="subject" aria-live="polite"></div>
                         </div>
 
                         <div class="form-floating">
                             <textarea class="form-control" id="message" name="mensagem" placeholder="Mensagem"
-                                minlength="10" maxlength="1200" required></textarea>
+                                minlength="10" maxlength="1200" aria-describedby="message-error" required></textarea>
                             <label for="message">Resumo do caso</label>
-                            <div class="field-error" data-error-for="message"></div>
+                            <div class="field-error" id="message-error" data-error-for="message" aria-live="polite"></div>
                         </div>
 
                         <div class="visually-hidden" aria-hidden="true">
@@ -465,7 +468,7 @@
                         </noscript>
                         {% endif %}
 
-                        <button id="submitBtn" class="send-button" {% if CAPTCHA_ENABLED %}disabled{% endif %}>
+                        <button type="submit" id="submitBtn" class="send-button" {% if CAPTCHA_ENABLED %}disabled{% endif %}>
                             Enviar para análise
                             <i class="bi bi-send"></i>
                         </button>
