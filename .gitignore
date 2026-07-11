@@ -1,7 +1,10 @@
-# .gitignore
-
-# Pycache
-__pycache__/
-
-# .env
 .env
+.venv/
+__pycache__/
+*.py[cod]
+.coverage
+htmlcov/
+coverage/
+node_modules/
+playwright-report/
+test-results/
