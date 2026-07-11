@@ -1,31 +1,26 @@
 /* src/static/js/mask.js */
 
-function formatPhoneBR(d) {
-  if (d.length <= 2) return d.replace(/^(\d{0,2})/, '($1');
-  if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
-  if (d.length === 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
-  return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
-}
-
-function formatPhoneDisplay(number, withDDI = false) {
-  let digits = String(number).replace(/\D/g, '');
-
-  if (digits.startsWith('55')) {
-    digits = digits.slice(2);
+(function () {
+  function formatPhoneBR(digits) {
+    if (!digits) return '';
+    if (digits.length <= 2) return digits.replace(/^(\d{0,2})/, '($1');
+    if (digits.length <= 6) return '(' + digits.slice(0, 2) + ') ' + digits.slice(2);
+    if (digits.length === 10) {
+      return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 6) + '-' + digits.slice(6);
+    }
+    return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 7) + '-' + digits.slice(7);
   }
 
-  digits = digits.slice(0, 11);
+  function formatPhoneDisplay(number) {
+    let digits = String(number).replace(/\D/g, '');
 
-  if (digits.length < 10) return number;
+    if (digits.startsWith('55')) {
+      digits = digits.slice(2);
+    }
 
-  const formatted = formatPhoneBR(digits);
-
-  return withDDI ? `+55 ${formatted}` : formatted;
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  const tel = document.getElementById('tel');
-  let lastDigits = '';
+    digits = digits.slice(0, 11);
+    return digits.length < 10 ? number : formatPhoneBR(digits);
+  }
 
   const validators = {
     name: function (value) {
@@ -76,100 +71,107 @@ document.addEventListener('DOMContentLoaded', function () {
     return !message;
   }
 
-  if (tel) {
-    function onInput(e) {
-      let raw = tel.value.replace(/\D/g, '');
-      let cursor = tel.selectionStart;
+  function initContactPage() {
+    const tel = document.getElementById('tel');
+    let lastDigits = '';
 
-      let isDelete = e.inputType && e.inputType.includes('delete');
+    if (tel) {
+      tel.addEventListener('input', function (event) {
+        const raw = tel.value.replace(/\D/g, '');
+        const cursor = tel.selectionStart;
+        const isDelete = event.inputType && event.inputType.includes('delete');
 
-      if (!isDelete && lastDigits.length === 11) {
-        tel.value = formatPhoneBR(lastDigits);
-        tel.setSelectionRange(cursor - 1, cursor - 1);
-        return;
-      }
-
-      let digits = raw.slice(0, 11);
-
-      let digitsBeforeCursor = tel.value
-        .slice(0, cursor)
-        .replace(/\D/g, '').length;
-
-      let formatted = formatPhoneBR(digits);
-      tel.value = formatted;
-
-      let pos = 0, count = 0;
-      for (let i = 0; i < formatted.length; i++) {
-        if (/\d/.test(formatted[i])) count++;
-        if (count >= digitsBeforeCursor) {
-          pos = i + 1;
-          break;
+        if (!isDelete && lastDigits.length === 11) {
+          tel.value = formatPhoneBR(lastDigits);
+          tel.setSelectionRange(cursor - 1, cursor - 1);
+          return;
         }
-      }
 
-      tel.setSelectionRange(pos, pos);
-      lastDigits = digits;
+        const digits = raw.slice(0, 11);
+        const digitsBeforeCursor = tel.value.slice(0, cursor).replace(/\D/g, '').length;
+        const formatted = formatPhoneBR(digits);
+        tel.value = formatted;
+
+        let position = 0;
+        let count = 0;
+        for (let index = 0; index < formatted.length; index += 1) {
+          if (/\d/.test(formatted[index])) count += 1;
+          if (count >= digitsBeforeCursor) {
+            position = index + 1;
+            break;
+          }
+        }
+
+        tel.setSelectionRange(position, position);
+        lastDigits = digits;
+      });
     }
 
-    tel.addEventListener('input', onInput);
+    document.querySelectorAll('[data-phone]').forEach(function (element) {
+      element.textContent = formatPhoneDisplay(element.dataset.phone);
+    });
+
+    document.querySelectorAll('.wa-track').forEach(function (element) {
+      element.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const url = element.href;
+        let opened = false;
+
+        function openOnce() {
+          if (opened) return;
+          opened = true;
+          window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        if (typeof gtag === 'function') {
+          gtag('event', 'conversion', {
+            'send_to': 'AW-17913181584/LZUECPCB-pocEJDr1d1C',
+            'value': 1.0,
+            'currency': 'BRL',
+            'event_callback': openOnce
+          });
+        } else {
+          openOnce();
+        }
+
+        setTimeout(openOnce, 800);
+      });
+    });
+
+    document.querySelectorAll('form').forEach(function (form) {
+      const fields = form.querySelectorAll('#name, #email, #tel, #subject, #message');
+
+      fields.forEach(function (field) {
+        field.addEventListener('blur', function () {
+          validateField(field);
+        });
+
+        field.addEventListener('input', function () {
+          if (field.classList.contains('is-invalid')) {
+            validateField(field);
+          }
+        });
+      });
+
+      form.addEventListener('submit', function (event) {
+        const isValid = Array.from(fields).map(validateField).every(Boolean);
+
+        if (!isValid) {
+          event.preventDefault();
+          const firstInvalid = form.querySelector('.is-invalid');
+          if (firstInvalid) firstInvalid.focus();
+        }
+      });
+    });
   }
 
-  document.querySelectorAll('[data-phone]').forEach(el => {
-    el.textContent = formatPhoneDisplay(el.dataset.phone, false);
-  });
+  window.DKContact = {
+    formatPhoneBR,
+    formatPhoneDisplay,
+    initContactPage,
+    validateField
+  };
 
-  document.querySelectorAll('.wa-track').forEach(el => {
-    el.addEventListener('click', function (e) {
-      e.preventDefault();
-
-      const url = el.href;
-      let opened = false;
-
-      function openOnce() {
-        if (opened) return;
-        opened = true;
-        window.open(url, '_blank', 'noopener,noreferrer');
-      }
-
-      if (typeof gtag === 'function') {
-        gtag('event', 'conversion', {
-          'send_to': 'AW-17913181584/LZUECPCB-pocEJDr1d1C',
-          'value': 1.0,
-          'currency': 'BRL',
-          'event_callback': openOnce
-        });
-      } else {
-        openOnce();
-      }
-
-      setTimeout(openOnce, 800);
-    });
-  });
-
-  document.querySelectorAll('form').forEach(function (form) {
-    form.querySelectorAll('#name, #email, #tel, #subject, #message').forEach(function (field) {
-      field.addEventListener('blur', function () {
-        validateField(field);
-      });
-
-      field.addEventListener('input', function () {
-        if (field.classList.contains('is-invalid')) {
-          validateField(field);
-        }
-      });
-    });
-
-    form.addEventListener('submit', function (e) {
-      const fields = Array.from(form.querySelectorAll('#name, #email, #tel, #subject, #message'));
-      const isValid = fields.map(validateField).every(Boolean);
-
-      if (!isValid) {
-        e.preventDefault();
-        const firstInvalid = form.querySelector('.is-invalid');
-        if (firstInvalid) {
-          firstInvalid.focus();
-        }
-      }
-    });
-  });
-});
+  document.addEventListener('DOMContentLoaded', initContactPage, { once: true });
+})();
