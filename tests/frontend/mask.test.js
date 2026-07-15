@@ -80,6 +80,12 @@ describe('contact form behavior', () => {
     expect(document.activeElement).toBe(fields[0]);
     expect(fields.every((field) => field.classList.contains('is-invalid'))).toBe(true);
 
+    const querySelector = vi.spyOn(form, 'querySelector').mockReturnValue(null);
+    const noFocusableSubmit = new Event('submit', { bubbles: true, cancelable: true });
+    form.dispatchEvent(noFocusableSubmit);
+    expect(noFocusableSubmit.defaultPrevented).toBe(true);
+    querySelector.mockRestore();
+
     fields[0].value = 'Al';
     fields[1].value = 'email-invalido';
     fields[2].value = '123';

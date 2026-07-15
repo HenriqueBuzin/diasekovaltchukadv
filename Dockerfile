@@ -1,8 +1,8 @@
 # Dockerfile
 
-FROM python:3.12-slim-bookworm
+FROM python:3.14.6-slim-bookworm
 
-ENV POETRY_VERSION=2.1.4 \
+ENV POETRY_VERSION=2.4.1 \
     POETRY_VIRTUALENVS_CREATE=false \
     POETRY_NO_INTERACTION=1
 
