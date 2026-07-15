@@ -144,7 +144,7 @@ def verify_turnstile(token: str, remote_ip: str | None) -> bool:
         )
         response.raise_for_status()
         return bool(response.json().get("success"))
-    except (requests.RequestException, ValueError):
+    except requests.RequestException, ValueError:
         app.logger.exception("Erro ao verificar Turnstile")
         return False
 

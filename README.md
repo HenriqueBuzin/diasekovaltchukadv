@@ -37,13 +37,20 @@ docker compose --profile prod down
 
 ## Testes
 
+Versões de desenvolvimento suportadas:
+
+- Python 3.14.6;
+- Node.js 24.18.0 LTS;
+- Poetry 2.4.1.
+
 Crie e ative um ambiente virtual dedicado. Neste computador ele fica em `C:\Users\henri\Documents\Projects\venv\diasekovaltchukadv`:
 
 ```powershell
-python -m venv C:\Users\henri\Documents\Projects\venv\diasekovaltchukadv
+& "$env:LOCALAPPDATA\Programs\Python\Python314\python.exe" -m venv C:\Users\henri\Documents\Projects\venv\diasekovaltchukadv
 C:\Users\henri\Documents\Projects\venv\diasekovaltchukadv\Scripts\Activate.ps1
-python -m pip install poetry==2.1.4
+python -m pip install poetry==2.4.1
 poetry install
+nvm use 24.18.0
 ```
 
 Instale também as dependências e o navegador dos testes frontend:

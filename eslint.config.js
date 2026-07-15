@@ -1,5 +1,5 @@
 import js from '@eslint/js';
-import importPlugin from 'eslint-plugin-import';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
 
 export default [
@@ -10,18 +10,11 @@ export default [
   {
     files: ['**/*.js'],
     plugins: {
-      import: importPlugin
+      'simple-import-sort': simpleImportSort
     },
     rules: {
-      'import/first': 'error',
-      'import/newline-after-import': 'error',
-      'import/order': [
-        'error',
-        {
-          alphabetize: { order: 'asc', caseInsensitive: true },
-          'newlines-between': 'always'
-        }
-      ]
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error'
     }
   },
   {
