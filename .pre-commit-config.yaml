@@ -1,0 +1,40 @@
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: poetry run black
+        language: system
+        types: [python]
+
+      - id: isort
+        name: isort
+        entry: poetry run isort
+        language: system
+        types: [python]
+
+      - id: flake8
+        name: flake8
+        entry: poetry run flake8
+        language: system
+        types: [python]
+
+      - id: prettier
+        name: prettier
+        entry: npm run format:frontend:files --
+        language: system
+        types: [javascript]
+
+      - id: eslint
+        name: eslint
+        entry: npm run lint:frontend:files --
+        language: system
+        types: [javascript]
+
+      - id: full-test-suite
+        name: backend, frontend and e2e test suite
+        entry: poetry run python scripts/run_tests.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

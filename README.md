@@ -37,10 +37,18 @@ docker compose --profile prod down
 
 ## Testes
 
-Instale as dependências de desenvolvimento:
+Crie e ative um ambiente virtual dedicado. Neste computador ele fica em `C:\Users\henri\Documents\Projects\venv\diasekovaltchukadv`:
+
+```powershell
+python -m venv C:\Users\henri\Documents\Projects\venv\diasekovaltchukadv
+C:\Users\henri\Documents\Projects\venv\diasekovaltchukadv\Scripts\Activate.ps1
+python -m pip install poetry==2.1.4
+poetry install
+```
+
+Instale também as dependências e o navegador dos testes frontend:
 
 ```bash
-python -m pip install -r requirements-dev.txt
 npm ci
 npx playwright install chromium
 ```
@@ -48,7 +56,7 @@ npx playwright install chromium
 No Windows, execute toda a suíte com:
 
 ```powershell
-.\scripts\test.ps1 -Python python
+.\scripts\test.ps1
 ```
 
 O script do Windows usa o Google Chrome instalado. No Linux/Jenkins, o Playwright usa o Chromium instalado pelo comando acima.
@@ -69,3 +77,19 @@ A suíte contém:
 - smoke tests da página e assets principais;
 - testes E2E em Chrome desktop e viewport de iPhone SE;
 - cobertura obrigatória de 100% de linhas, funções, statements e branches no backend e frontend.
+
+### Validar automaticamente antes do commit
+
+Instale o hook uma vez em cada clone do repositório. No Windows, o instalador também configura o GitHub Desktop para encontrar o Poetry no venv dedicado:
+
+```powershell
+.\scripts\install_hooks.ps1
+```
+
+A partir disso, `git commit` executa toda a suíte e bloqueia o commit quando qualquer teste, auditoria ou meta de cobertura falhar. Para disparar a mesma validação manualmente:
+
+```bash
+poetry run pre-commit run --all-files
+```
+
+Os hooks executam `poetry run black`, `poetry run isort` e `poetry run flake8` no backend; `npm run format:frontend:files` (Prettier) e `npm run lint:frontend:files` (ESLint com validação de imports) no frontend; e por fim a suíte completa. O workflow `.github/workflows/tests.yml` repete a validação no GitHub em todo push e pull request. O hook local atua antes do commit; o GitHub Actions protege o repositório mesmo quando alguém ainda não instalou o hook.

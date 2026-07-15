@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-
 const modulePath = '../../src/static/js/mask.js';
 
 function formMarkup() {
@@ -73,20 +72,20 @@ describe('contact form behavior', () => {
   it('shows required, length and format errors then clears them', async () => {
     await initialize();
     const form = document.querySelector('form');
-    const fields = ['name', 'email', 'tel', 'subject', 'message'].map(id => document.getElementById(id));
+    const fields = ['name', 'email', 'tel', 'subject', 'message'].map((id) => document.getElementById(id));
 
     const emptySubmit = new Event('submit', { bubbles: true, cancelable: true });
     form.dispatchEvent(emptySubmit);
     expect(emptySubmit.defaultPrevented).toBe(true);
     expect(document.activeElement).toBe(fields[0]);
-    expect(fields.every(field => field.classList.contains('is-invalid'))).toBe(true);
+    expect(fields.every((field) => field.classList.contains('is-invalid'))).toBe(true);
 
     fields[0].value = 'Al';
     fields[1].value = 'email-invalido';
     fields[2].value = '123';
     fields[3].value = 'Oi';
     fields[4].value = 'curta';
-    fields.forEach(field => field.dispatchEvent(new Event('blur')));
+    fields.forEach((field) => field.dispatchEvent(new Event('blur')));
     expect(document.querySelector('[data-error-for="name"]').textContent).toContain('3 caracteres');
     expect(document.querySelector('[data-error-for="email"]').textContent).toContain('válido');
     expect(document.querySelector('[data-error-for="tel"]').textContent).toContain('10 ou 11');
@@ -102,7 +101,7 @@ describe('contact form behavior', () => {
     const validSubmit = new Event('submit', { bubbles: true, cancelable: true });
     form.dispatchEvent(validSubmit);
     expect(validSubmit.defaultPrevented).toBe(false);
-    expect(fields.every(field => field.getAttribute('aria-invalid') === 'false')).toBe(true);
+    expect(fields.every((field) => field.getAttribute('aria-invalid') === 'false')).toBe(true);
   });
 
   it('handles a missing error element and a page without telephone input', async () => {

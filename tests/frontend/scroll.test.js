@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-
 async function initialize(markup) {
   document.body.innerHTML = markup;
   if (!window.DKNavigation) await import('../../src/static/js/scroll.js');

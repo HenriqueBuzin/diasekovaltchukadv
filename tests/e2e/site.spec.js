@@ -1,19 +1,22 @@
 import { expect, test } from '@playwright/test';
 
+const openPage = (page, path = '/') => page.goto(path, { waitUntil: 'domcontentloaded' });
 
 test('smoke: home page renders its critical content', async ({ page }) => {
-  const response = await page.goto('/');
+  const response = await openPage(page);
   expect(response?.status()).toBe(200);
   await expect(page).toHaveTitle('Dias Kovaltchuk Advogadas Associadas');
-  await expect(page.getByRole('heading', {
-    level: 1,
-    name: 'Quando o problema é sério, sua defesa precisa ser séria desde o primeiro contato.'
-  })).toBeVisible();
+  await expect(
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Quando o problema é sério, sua defesa precisa ser séria desde o primeiro contato.'
+    })
+  ).toBeVisible();
   await expect(page.getByRole('link', { name: 'Quero atendimento agora' })).toBeVisible();
 });
 
 test('regression: WhatsApp links use the sanitized environment number', async ({ page }) => {
-  await page.goto('/');
+  await openPage(page);
   const links = page.locator('a.wa-track');
   const count = await links.count();
   expect(count).toBeGreaterThan(0);
@@ -24,7 +27,7 @@ test('regression: WhatsApp links use the sanitized environment number', async ({
 });
 
 test('functional: navigation reaches the contact form', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await openPage(page);
   if (testInfo.project.name === 'mobile') {
     await page.getByRole('button', { name: 'Abrir menu' }).click();
   }
@@ -34,7 +37,7 @@ test('functional: navigation reaches the contact form', async ({ page }, testInf
 });
 
 test('functional: invalid form shows every inline validation message', async ({ page }) => {
-  await page.goto('/#contact');
+  await openPage(page, '/#contact');
   await page.getByRole('button', { name: 'Enviar para análise' }).click();
 
   await expect(page.locator('#name-error')).toHaveText('Informe seu nome.');
@@ -46,7 +49,7 @@ test('functional: invalid form shows every inline validation message', async ({ 
 });
 
 test('integration: form fields accept a valid contact without client errors', async ({ page }) => {
-  await page.goto('/#contact');
+  await openPage(page, '/#contact');
   await page.locator('#name').fill('Pessoa da Silva');
   await page.locator('#email').fill('pessoa@example.com');
   await page.locator('#tel').fill('48999999999');
@@ -59,7 +62,7 @@ test('integration: form fields accept a valid contact without client errors', as
 });
 
 test('responsive regression: layout has no horizontal overflow', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await openPage(page);
 
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,

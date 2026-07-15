@@ -1,15 +1,14 @@
 # src/main.py
 
-from dataclasses import dataclass
 import os
 import re
+from dataclasses import dataclass
 from smtplib import SMTPException
 
 import requests
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_mail import Mail, Message
 from werkzeug.middleware.proxy_fix import ProxyFix
-
 
 EMAIL_PATTERN = re.compile(r"[^@\s]+@[^@\s]+\.[^@\s]{2,}")
 FIELD_LIMITS = {
