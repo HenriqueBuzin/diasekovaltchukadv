@@ -124,12 +124,12 @@
           window.open(url, '_blank', 'noopener,noreferrer');
         }
 
-        if (typeof gtag === 'function') {
-          gtag('event', 'conversion', {
-            'send_to': 'AW-17913181584/LZUECPCB-pocEJDr1d1C',
-            'value': 1.0,
-            'currency': 'BRL',
-            'event_callback': openOnce
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'conversion', {
+            send_to: 'AW-17913181584/LZUECPCB-pocEJDr1d1C',
+            value: 1.0,
+            currency: 'BRL',
+            event_callback: openOnce
           });
         } else {
           openOnce();

@@ -1,10 +1,9 @@
 import os
-from pathlib import Path
-from smtplib import SMTPException
 import sys
 import unittest
+from pathlib import Path
+from smtplib import SMTPException
 from unittest.mock import Mock, patch
-
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -30,8 +29,7 @@ ENV_DEFAULTS = {
 for name, value in ENV_DEFAULTS.items():
     os.environ.setdefault(name, value)
 
-import main
-
+import main  # noqa: E402
 
 VALID_CONTACT = {
     "nome": "Pessoa da Silva",
@@ -77,13 +75,17 @@ class UnitTests(unittest.TestCase):
             self.assertEqual(main.load_turnstile_config(True), ("site-key", "secret-key"))
 
     def test_contact_from_request_trims_all_fields(self):
-        with main.app.test_request_context("/send", method="POST", data={
-            "nome": "  Nome  ",
-            "email": "  nome@example.com ",
-            "telefone": "  (48) 99999-9999 ",
-            "assunto": "  Assunto  ",
-            "mensagem": "  Mensagem suficientemente longa  ",
-        }):
+        with main.app.test_request_context(
+            "/send",
+            method="POST",
+            data={
+                "nome": "  Nome  ",
+                "email": "  nome@example.com ",
+                "telefone": "  (48) 99999-9999 ",
+                "assunto": "  Assunto  ",
+                "mensagem": "  Mensagem suficientemente longa  ",
+            },
+        ):
             contact = main.Contato.from_request()
 
         self.assertEqual(contact.nome, "Nome")
@@ -230,9 +232,12 @@ class ApiFunctionalIntegrationTests(unittest.TestCase):
         ]
 
         for headers, expected_ip in cases:
-            with self.subTest(headers=headers), patch.object(main, "CAPTCHA_ENABLED", True), patch.object(
-                main, "verify_turnstile", return_value=False
-            ) as verify, patch.object(main.mail, "send") as send_mail:
+            with (
+                self.subTest(headers=headers),
+                patch.object(main, "CAPTCHA_ENABLED", True),
+                patch.object(main, "verify_turnstile", return_value=False) as verify,
+                patch.object(main.mail, "send") as send_mail,
+            ):
                 response = self.client.post(
                     "/send",
                     data={**VALID_CONTACT, "cf-turnstile-response": "token"},
@@ -259,9 +264,11 @@ class ApiFunctionalIntegrationTests(unittest.TestCase):
             self.assertTrue(flask_session["conversion_fired"])
 
     def test_valid_captcha_allows_mail_delivery(self):
-        with patch.object(main, "CAPTCHA_ENABLED", True), patch.object(
-            main, "verify_turnstile", return_value=True
-        ) as verify, patch.object(main.mail, "send") as send_mail:
+        with (
+            patch.object(main, "CAPTCHA_ENABLED", True),
+            patch.object(main, "verify_turnstile", return_value=True) as verify,
+            patch.object(main.mail, "send") as send_mail,
+        ):
             response = self.client.post(
                 "/send",
                 data={**VALID_CONTACT, "cf-turnstile-response": "valid-token"},
