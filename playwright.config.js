@@ -3,12 +3,15 @@ import { defineConfig, devices } from '@playwright/test';
 const python = process.env.PYTHON || 'python';
 const browserChannel = process.env.PLAYWRIGHT_CHANNEL;
 const channel = browserChannel ? { channel: browserChannel } : {};
+process.env.PLAYWRIGHT_PORT ||= String(20_000 + (process.pid % 20_000));
+const port = Number(process.env.PLAYWRIGHT_PORT);
+const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,
   use: {
-    baseURL: 'http://127.0.0.1:5179',
+    baseURL,
     trace: 'retain-on-failure'
   },
   projects: [
@@ -20,7 +23,7 @@ export default defineConfig({
   ],
   webServer: {
     command: `${python} src/main.py`,
-    url: 'http://127.0.0.1:5179/',
+    url: `${baseURL}/`,
     reuseExistingServer: false,
     timeout: 120_000,
     env: {
@@ -39,7 +42,7 @@ export default defineConfig({
       CAPTCHA_ENABLED: 'false',
       CONTACT_TO: 'destino@example.com',
       ASSET_VERSION: 'e2e',
-      PORT: '5179'
+      PORT: String(port)
     }
   }
 });
