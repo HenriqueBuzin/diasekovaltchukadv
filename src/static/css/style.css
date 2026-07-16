@@ -1,5 +1,6 @@
 /* src/static/css/style.css */
 
+/* Tokens and base */
 :root {
     --night: #0d0f14;
     --charcoal: #171a21;
@@ -53,6 +54,7 @@ a {
     width: min(100% - 32px, 1220px);
 }
 
+/* Navigation and shared actions */
 .topbar {
     padding: 18px 0;
     background: rgba(13, 15, 20, 0.78);
@@ -142,6 +144,7 @@ a {
     color: var(--night);
 }
 
+/* Hero */
 .hero-section {
     position: relative;
     min-height: 100vh;
@@ -342,6 +345,7 @@ a {
     scroll-margin-top: 104px;
 }
 
+/* About */
 .intro-section {
     background:
         linear-gradient(90deg, rgba(38, 93, 95, 0.11), transparent 44%),
@@ -405,6 +409,7 @@ a {
     color: var(--muted);
 }
 
+/* Practice areas */
 .practice-section {
     color: var(--paper);
     background:
@@ -500,6 +505,7 @@ a {
     margin: 0;
 }
 
+/* Process */
 .process-section {
     background: var(--white);
 }
@@ -552,6 +558,7 @@ a {
     margin: 0;
 }
 
+/* Team */
 .team-section {
     background:
         linear-gradient(90deg, var(--paper), #efe8db);
@@ -622,6 +629,7 @@ a {
     margin: 0;
 }
 
+/* Contact */
 .contact-section {
     padding: 110px 0;
     scroll-margin-top: 104px;
@@ -795,6 +803,7 @@ textarea.form-control {
     border-radius: 0;
 }
 
+/* Responsive */
 @media (max-width: 1120px) {
     .hero-shell,
     .split-heading,
