@@ -25,7 +25,8 @@
   const validators = {
     name: function (value) {
       if (!value.trim()) return 'Informe seu nome.';
-      if (value.trim().length < 3) return 'Informe pelo menos 3 caracteres.';
+      const minimum = Number(this.minLength);
+      if (value.trim().length < minimum) return `Informe pelo menos ${minimum} caracteres.`;
       return '';
     },
     email: function (value) {
@@ -37,17 +38,22 @@
     tel: function (value) {
       const digits = value.replace(/\D/g, '');
       if (!digits) return 'Informe seu telefone.';
-      if (digits.length !== 10 && digits.length !== 11) return 'Use DDD + telefone com 10 ou 11 dígitos.';
+      const minimum = Number(this.dataset.minDigits);
+      const maximum = Number(this.dataset.maxDigits);
+      if (digits.length < minimum || digits.length > maximum) {
+        return `Use DDD + telefone com ${minimum} ou ${maximum} dígitos.`;
+      }
       return '';
     },
     subject: function (value) {
       if (!value.trim()) return 'Informe o assunto.';
-      if (value.trim().length < 3) return 'Descreva melhor o assunto.';
+      if (value.trim().length < Number(this.minLength)) return 'Descreva melhor o assunto.';
       return '';
     },
     message: function (value) {
       if (!value.trim()) return 'Escreva um resumo do caso.';
-      if (value.trim().length < 10) return 'Escreva pelo menos 10 caracteres.';
+      const minimum = Number(this.minLength);
+      if (value.trim().length < minimum) return `Escreva pelo menos ${minimum} caracteres.`;
       return '';
     }
   };
@@ -66,7 +72,7 @@
     const validator = validators[field.id];
     if (!validator) return true;
 
-    const message = validator(field.value);
+    const message = validator.call(field, field.value);
     setFieldError(field, message);
     return !message;
   }

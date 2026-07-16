@@ -9,11 +9,11 @@ function formMarkup() {
     <span data-phone="123"></span>
     <a class="wa-track" href="https://wa.me/5548999999999">WhatsApp</a>
     <form>
-      <input id="name"><div data-error-for="name"></div>
+      <input id="name" minlength="3" maxlength="120"><div data-error-for="name"></div>
       <input id="email"><div data-error-for="email"></div>
-      <input id="tel"><div data-error-for="tel"></div>
-      <input id="subject"><div data-error-for="subject"></div>
-      <textarea id="message"></textarea><div data-error-for="message"></div>
+      <input id="tel" data-min-digits="10" data-max-digits="11"><div data-error-for="tel"></div>
+      <input id="subject" minlength="3" maxlength="160"><div data-error-for="subject"></div>
+      <textarea id="message" minlength="10" maxlength="1200"></textarea><div data-error-for="message"></div>
     </form>`;
 }
 

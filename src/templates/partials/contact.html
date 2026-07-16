@@ -1,0 +1,118 @@
+<section class="contact-section" id="contact">
+    <div class="container contact-layout">
+        <div class="contact-panel">
+            <span class="kicker">Contato</span>
+            <h2>Pronta para entender seu caso?</h2>
+            <p>
+                Fale com a Dias & Kovaltchuk e receba uma orientação inicial sobre riscos, urgências e caminhos
+                possíveis.
+            </p>
+            <div class="contact-methods">
+                <a href="mailto:{{ CONTACT_EMAIL }}">
+                    <i class="bi bi-envelope"></i>
+                    {{ CONTACT_EMAIL }}
+                </a>
+                <a href="https://wa.me/{{ WHATS_LINK_NUMBER }}" class="wa-track">
+                    <i class="bi bi-whatsapp"></i>
+                    <span class="phone" data-phone="{{ WHATS_NUMBER }}"></span>
+                </a>
+            </div>
+            <div class="social-row">
+                <a href="{{ SOCIAL_FB_URL }}" target="_blank" rel="noopener" aria-label="Facebook">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="{{ SOCIAL_IG_URL }}" target="_blank" rel="noopener" aria-label="Instagram">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                <a href="https://wa.me/{{ WHATS_LINK_NUMBER }}" class="wa-track" aria-label="WhatsApp">
+                    <i class="bi bi-whatsapp"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="form-panel">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            {% set category, msg = (messages|last) %}
+            {% set bs_cat = 'danger' if category in ['danger','error'] else category %}
+            <div class="alert alert-{{ bs_cat }} alert-dismissible fade show" role="alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('send') }}" method="POST" class="contact-form" novalidate>
+                <div class="field-grid">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="name" placeholder="Fulano da Silva"
+                            name="nome" minlength="{{ FIELD_LIMITS['nome'][0] }}"
+                            maxlength="{{ FIELD_LIMITS['nome'][1] }}" autocomplete="name"
+                            aria-describedby="name-error" required>
+                        <label for="name">Nome</label>
+                        <div class="field-error" id="name-error" data-error-for="name" aria-live="polite"></div>
+                    </div>
+                    <div class="form-floating">
+                        <input type="tel" class="form-control" id="tel" name="telefone"
+                            placeholder="(48) 99999-9999" pattern="\(\d{2}\)\s\d{4,5}-\d{4}" autocomplete="tel"
+                            inputmode="tel" data-min-digits="{{ FIELD_LIMITS['telefone'][0] }}"
+                            data-max-digits="{{ FIELD_LIMITS['telefone'][1] }}" aria-describedby="tel-error"
+                            required>
+                        <label for="tel">Telefone</label>
+                        <div class="field-error" id="tel-error" data-error-for="tel" aria-live="polite"></div>
+                    </div>
+                </div>
+
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com"
+                        name="email" minlength="{{ FIELD_LIMITS['email'][0] }}"
+                        maxlength="{{ FIELD_LIMITS['email'][1] }}" autocomplete="email"
+                        aria-describedby="email-error" required>
+                    <label for="email">Email</label>
+                    <div class="field-error" id="email-error" data-error-for="email" aria-live="polite"></div>
+                </div>
+
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="subject" name="assunto" placeholder="Assunto"
+                        minlength="{{ FIELD_LIMITS['assunto'][0] }}"
+                        maxlength="{{ FIELD_LIMITS['assunto'][1] }}" aria-describedby="subject-error" required>
+                    <label for="subject">Assunto</label>
+                    <div class="field-error" id="subject-error" data-error-for="subject" aria-live="polite"></div>
+                </div>
+
+                <div class="form-floating">
+                    <textarea class="form-control" id="message" name="mensagem" placeholder="Mensagem"
+                        minlength="{{ FIELD_LIMITS['mensagem'][0] }}"
+                        maxlength="{{ FIELD_LIMITS['mensagem'][1] }}" aria-describedby="message-error"
+                        required></textarea>
+                    <label for="message">Resumo do caso</label>
+                    <div class="field-error" id="message-error" data-error-for="message" aria-live="polite"></div>
+                </div>
+
+                <div class="visually-hidden" aria-hidden="true">
+                    <label for="website">Seu site</label>
+                    <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                </div>
+
+                {% if CAPTCHA_ENABLED %}
+                <div class="turnstile-wrap">
+                    <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}" data-theme="auto"
+                        data-callback="onTurnstileOk" data-expired-callback="onTurnstileExpired"
+                        data-error-callback="onTurnstileError">
+                    </div>
+                </div>
+                <noscript>
+                    <div class="alert alert-warning mt-2">
+                        Ative o JavaScript para concluir a verificação e enviar o formulário.
+                    </div>
+                </noscript>
+                {% endif %}
+
+                <button type="submit" id="submitBtn" class="send-button" {% if CAPTCHA_ENABLED %}disabled{% endif %}>
+                    Enviar para análise
+                    <i class="bi bi-send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>

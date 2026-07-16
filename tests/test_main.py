@@ -29,7 +29,9 @@ ENV_DEFAULTS = {
 for name, value in ENV_DEFAULTS.items():
     os.environ.setdefault(name, value)
 
+import contact  # noqa: E402
 import main  # noqa: E402
+import turnstile  # noqa: E402
 
 VALID_CONTACT = {
     "nome": "Pessoa da Silva",
@@ -54,9 +56,9 @@ class UnitTests(unittest.TestCase):
                 main.require_env("TEST_MISSING")
 
     def test_normalizers_and_email_validation(self):
-        self.assertEqual(main.only_digits("+55 (48) 98802-6847"), "5548988026847")
-        self.assertTrue(main.is_valid_email("nome@example.com"))
-        self.assertFalse(main.is_valid_email("nome@invalido"))
+        self.assertEqual(contact.only_digits("+55 (48) 98802-6847"), "5548988026847")
+        self.assertTrue(contact.is_valid_email("nome@example.com"))
+        self.assertFalse(contact.is_valid_email("nome@invalido"))
 
     def test_recipient_parser(self):
         self.assertEqual(
@@ -74,47 +76,52 @@ class UnitTests(unittest.TestCase):
         ):
             self.assertEqual(main.load_turnstile_config(True), ("site-key", "secret-key"))
 
-    def test_contact_from_request_trims_all_fields(self):
-        with main.app.test_request_context(
-            "/send",
-            method="POST",
-            data={
+    def test_app_factory_override_and_turnstile_adapter(self):
+        application = main.create_app({"TESTING": True, "TURNSTILE_SECRET_KEY": "override-secret"})
+        self.assertTrue(application.testing)
+
+        with application.app_context(), patch.object(main, "verify_turnstile_request", return_value=True) as verify:
+            self.assertTrue(main.verify_turnstile("token", "203.0.113.8"))
+
+        verify.assert_called_once_with("token", "203.0.113.8", "override-secret", application.logger)
+
+    def test_contact_from_mapping_trims_all_fields(self):
+        parsed = contact.Contato.from_mapping(
+            {
                 "nome": "  Nome  ",
                 "email": "  nome@example.com ",
                 "telefone": "  (48) 99999-9999 ",
                 "assunto": "  Assunto  ",
                 "mensagem": "  Mensagem suficientemente longa  ",
-            },
-        ):
-            contact = main.Contato.from_request()
+            }
+        )
 
-        self.assertEqual(contact.nome, "Nome")
-        self.assertEqual(contact.email, "nome@example.com")
-        self.assertEqual(contact.telefone, "(48) 99999-9999")
-        self.assertEqual(contact.assunto, "Assunto")
-        self.assertEqual(contact.mensagem, "Mensagem suficientemente longa")
+        self.assertEqual(parsed.nome, "Nome")
+        self.assertEqual(parsed.email, "nome@example.com")
+        self.assertEqual(parsed.telefone, "(48) 99999-9999")
+        self.assertEqual(parsed.assunto, "Assunto")
+        self.assertEqual(parsed.mensagem, "Mensagem suficientemente longa")
 
-    def test_contact_from_empty_request(self):
-        with main.app.test_request_context("/send", method="POST"):
-            contact = main.Contato.from_request()
-        self.assertEqual(contact, main.Contato("", "", "", "", ""))
+    def test_contact_from_empty_mapping(self):
+        parsed = contact.Contato.from_mapping({})
+        self.assertEqual(parsed, contact.Contato("", "", "", "", ""))
 
     def test_contact_validation_accepts_boundaries(self):
-        contact = main.Contato(
+        parsed = contact.Contato(
             nome="Ana",
             email="a@b.co",
             telefone="4899999999",
             assunto="Caso",
             mensagem="1234567890",
         )
-        self.assertEqual(main.validate_contact(contact), [])
+        self.assertEqual(contact.validate_contact(parsed), [])
 
-        eleven_digit_phone = main.Contato(**{**contact.__dict__, "telefone": "48999999999"})
-        self.assertEqual(main.validate_contact(eleven_digit_phone), [])
+        eleven_digit_phone = contact.Contato(**{**parsed.__dict__, "telefone": "48999999999"})
+        self.assertEqual(contact.validate_contact(eleven_digit_phone), [])
 
     def test_contact_validation_rejects_each_invalid_field(self):
-        contact = main.Contato("A", "inválido", "123", "Oi", "curta")
-        errors = main.validate_contact(contact)
+        parsed = contact.Contato("A", "inválido", "123", "Oi", "curta")
+        errors = contact.validate_contact(parsed)
         self.assertEqual(len(errors), 5)
         self.assertIn("nome", errors[0])
         self.assertIn("e-mail", errors[1])
@@ -123,43 +130,45 @@ class UnitTests(unittest.TestCase):
         self.assertIn("1200", errors[4])
 
     def test_contact_validation_rejects_oversized_and_header_injection(self):
-        contact = main.Contato(
+        parsed = contact.Contato(
             nome="N" * 121,
             email=("a" * 156) + "@b.co",
             telefone="4899999999",
             assunto=("A" * 161) + "\r\nBcc: attacker@example.com",
             mensagem="M" * 1201,
         )
-        errors = main.validate_contact(contact)
+        errors = contact.validate_contact(parsed)
         self.assertEqual(len(errors), 5)
         self.assertTrue(any("caracteres inválidos" in error for error in errors))
 
 
 class TurnstileUnitTests(unittest.TestCase):
     def test_empty_token_is_rejected(self):
-        self.assertFalse(main.verify_turnstile("", "127.0.0.1"))
+        self.assertFalse(turnstile.verify("", "127.0.0.1", "secret", Mock()))
 
     def test_success_and_failure_responses(self):
         response = Mock()
         response.raise_for_status.return_value = None
         response.json.side_effect = [{"success": True}, {"success": False}]
 
-        with patch.object(main.requests, "post", return_value=response) as post:
-            self.assertTrue(main.verify_turnstile("token", None))
-            self.assertFalse(main.verify_turnstile("token", "203.0.113.10"))
+        with patch.object(turnstile.requests, "post", return_value=response) as post:
+            self.assertTrue(turnstile.verify("token", None, "secret", Mock()))
+            self.assertFalse(turnstile.verify("token", "203.0.113.10", "secret", Mock()))
 
         self.assertEqual(post.call_args_list[0].kwargs["data"]["remoteip"], "")
         self.assertEqual(post.call_args_list[1].kwargs["data"]["remoteip"], "203.0.113.10")
 
     def test_network_and_json_errors_are_rejected(self):
-        with patch.object(main.requests, "post", side_effect=main.requests.RequestException):
-            self.assertFalse(main.verify_turnstile("token", "127.0.0.1"))
+        logger = Mock()
+        with patch.object(turnstile.requests, "post", side_effect=turnstile.requests.RequestException):
+            self.assertFalse(turnstile.verify("token", "127.0.0.1", "secret", logger))
 
         response = Mock()
         response.raise_for_status.return_value = None
         response.json.side_effect = ValueError
-        with patch.object(main.requests, "post", return_value=response):
-            self.assertFalse(main.verify_turnstile("token", "127.0.0.1"))
+        with patch.object(turnstile.requests, "post", return_value=response):
+            self.assertFalse(turnstile.verify("token", "127.0.0.1", "secret", logger))
+        self.assertEqual(logger.exception.call_count, 2)
 
 
 class ApiFunctionalIntegrationTests(unittest.TestCase):
@@ -178,6 +187,10 @@ class ApiFunctionalIntegrationTests(unittest.TestCase):
         self.assertIn("v=test-version", html)
         self.assertNotIn("jquery", html.lower())
         self.assertIn('aria-describedby="email-error"', html)
+        self.assertIn('minlength="3"', html)
+        self.assertIn('data-min-digits="10"', html)
+        self.assertIn("bootstrap@5.3.8", html)
+        self.assertIn("images/equipe.webp", html)
 
     def test_conversion_event_is_rendered_once(self):
         with self.client.session_transaction() as flask_session:
@@ -234,7 +247,7 @@ class ApiFunctionalIntegrationTests(unittest.TestCase):
         for headers, expected_ip in cases:
             with (
                 self.subTest(headers=headers),
-                patch.object(main, "CAPTCHA_ENABLED", True),
+                patch.dict(main.app.config, {"CAPTCHA_ENABLED": True}),
                 patch.object(main, "verify_turnstile", return_value=False) as verify,
                 patch.object(main.mail, "send") as send_mail,
             ):
@@ -265,7 +278,7 @@ class ApiFunctionalIntegrationTests(unittest.TestCase):
 
     def test_valid_captcha_allows_mail_delivery(self):
         with (
-            patch.object(main, "CAPTCHA_ENABLED", True),
+            patch.dict(main.app.config, {"CAPTCHA_ENABLED": True}),
             patch.object(main, "verify_turnstile", return_value=True) as verify,
             patch.object(main.mail, "send") as send_mail,
         ):
