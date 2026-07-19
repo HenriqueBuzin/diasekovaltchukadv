@@ -3,7 +3,7 @@ services:
     profiles: ["prod"]
     restart: unless-stopped
     build: .
-    working_dir: /src
+    working_dir: /app
     ports:
       - "3002:3002"
     environment:
@@ -17,9 +17,7 @@ services:
     profiles: ["dev"]
     restart: unless-stopped
     build: .
-    working_dir: /src
-    volumes:
-      - ./src/:/src/
+    working_dir: /app
     ports:
       - "3003:3003"
     environment:

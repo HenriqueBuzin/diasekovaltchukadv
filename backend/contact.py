@@ -30,12 +30,16 @@ class Contato:
 
     @classmethod
     def from_mapping(cls, values: Mapping[str, str]) -> "Contato":
+        def text(name: str) -> str:
+            value = values.get(name, "")
+            return value.strip() if isinstance(value, str) else ""
+
         return cls(
-            nome=values.get("nome", "").strip(),
-            email=values.get("email", "").strip(),
-            telefone=values.get("telefone", "").strip(),
-            assunto=values.get("assunto", "").strip(),
-            mensagem=values.get("mensagem", "").strip(),
+            nome=text("nome"),
+            email=text("email"),
+            telefone=text("telefone"),
+            assunto=text("assunto"),
+            mensagem=text("mensagem"),
         )
 
 

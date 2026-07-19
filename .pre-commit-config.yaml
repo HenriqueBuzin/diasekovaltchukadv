@@ -23,13 +23,13 @@ repos:
         name: prettier
         entry: npm run format:frontend:files --
         language: system
-        types: [javascript]
+        types_or: [javascript, jsx, ts, tsx, css, html, json]
 
       - id: eslint
         name: eslint
         entry: npm run lint:frontend:files --
         language: system
-        types: [javascript]
+        types_or: [javascript, jsx, ts, tsx]
 
       - id: full-test-suite
         name: backend, frontend and e2e test suite

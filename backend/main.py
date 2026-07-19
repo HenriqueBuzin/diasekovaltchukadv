@@ -1,13 +1,15 @@
 import os
+from pathlib import Path
 from smtplib import SMTPException
 
-from flask import Flask, current_app, flash, redirect, render_template, request, session, url_for
+from contact import FIELD_LIMITS, Contato, build_message_body, only_digits, validate_contact
+from flask import Flask, abort, current_app, jsonify, request, send_from_directory
 from flask_mail import Mail, Message
+from turnstile import verify as verify_turnstile_request
+from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from contact import FIELD_LIMITS, Contato, build_message_body, only_digits, validate_contact
-from turnstile import verify as verify_turnstile_request
-
+ROOT = Path(__file__).resolve().parents[1]
 mail = Mail()
 
 
@@ -45,10 +47,6 @@ def environment_config() -> dict:
         "DEBUG": debug,
         "SECRET_KEY": require_env("FLASK_SECRET_KEY"),
         "PREFERRED_URL_SCHEME": "https",
-        "SESSION_COOKIE_SECURE": not debug,
-        "SESSION_COOKIE_HTTPONLY": True,
-        "SESSION_COOKIE_SAMESITE": "Lax",
-        "REMEMBER_COOKIE_SECURE": not debug,
         "MAX_CONTENT_LENGTH": 64 * 1024,
         "MAIL_SERVER": require_env("MAIL_SERVER"),
         "MAIL_PORT": int(require_env("MAIL_PORT")),
@@ -62,11 +60,11 @@ def environment_config() -> dict:
         "WHATS_LINK_NUMBER": only_digits(whats_number),
         "SOCIAL_FB_URL": require_env("SOCIAL_FB_URL"),
         "SOCIAL_IG_URL": require_env("SOCIAL_IG_URL"),
-        "ASSET_VERSION": os.getenv("ASSET_VERSION", "20260716"),
         "CAPTCHA_ENABLED": captcha_enabled,
         "TURNSTILE_SITE_KEY": turnstile_site_key,
         "TURNSTILE_SECRET_KEY": turnstile_secret_key,
         "RECIPIENTS": parse_recipients(require_env("CONTACT_TO")),
+        "FRONTEND_DIST": Path(os.getenv("FRONTEND_DIST", ROOT / "frontend" / "dist")),
     }
 
 
@@ -79,51 +77,47 @@ def verify_turnstile(token: str, remote_ip: str | None) -> bool:
     )
 
 
-def contact_redirect():
-    return redirect(url_for("index") + "#contact")
+def field_rules() -> dict[str, dict[str, int]]:
+    return {name: {"min": limits[0], "max": limits[1]} for name, limits in FIELD_LIMITS.items()}
+
+
+def client_ip() -> str | None:
+    return (
+        request.headers.get("CF-Connecting-IP")
+        or request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+        or request.remote_addr
+    )
 
 
 def register_routes(app: Flask) -> None:
-    @app.route("/")
-    def index():
-        template_context = {
-            name: app.config[name]
-            for name in (
-                "CONTACT_EMAIL",
-                "WHATS_NUMBER",
-                "WHATS_LINK_NUMBER",
-                "SOCIAL_FB_URL",
-                "SOCIAL_IG_URL",
-                "CAPTCHA_ENABLED",
-                "TURNSTILE_SITE_KEY",
-                "ASSET_VERSION",
-            )
-        }
-        return render_template("index.html", FIELD_LIMITS=FIELD_LIMITS, **template_context)
+    @app.get("/api/site-config")
+    def site_config():
+        return jsonify(
+            contactEmail=app.config["CONTACT_EMAIL"],
+            whatsNumber=app.config["WHATS_NUMBER"],
+            whatsLinkNumber=app.config["WHATS_LINK_NUMBER"],
+            socialFacebook=app.config["SOCIAL_FB_URL"],
+            socialInstagram=app.config["SOCIAL_IG_URL"],
+            captchaEnabled=app.config["CAPTCHA_ENABLED"],
+            turnstileSiteKey=app.config["TURNSTILE_SITE_KEY"],
+            fieldLimits=field_rules(),
+        )
 
-    @app.route("/send", methods=["POST"])
-    def send():
-        contact = Contato.from_mapping(request.form)
+    @app.post("/api/contact")
+    def send_contact():
+        data = request.get_json(silent=True) or request.form
+        contact = Contato.from_mapping(data)
 
-        if request.form.get("website"):
+        if data.get("website"):
             app.logger.warning("Honeypot acionado no formulário de contato.")
-            flash("Não foi possível enviar a mensagem. Tente novamente.", "danger")
-            return contact_redirect()
+            return jsonify(message="Não foi possível enviar a mensagem. Tente novamente."), 400
 
         validation_errors = validate_contact(contact)
         if validation_errors:
-            flash(" ".join(validation_errors), "danger")
-            return contact_redirect()
+            return jsonify(message=" ".join(validation_errors), errors=validation_errors), 400
 
-        if app.config["CAPTCHA_ENABLED"]:
-            remote_ip = (
-                request.headers.get("CF-Connecting-IP")
-                or request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
-                or request.remote_addr
-            )
-            if not verify_turnstile(request.form.get("cf-turnstile-response", ""), remote_ip):
-                flash("Falha na verificação anti-spam. Tente novamente.", "danger")
-                return contact_redirect()
+        if app.config["CAPTCHA_ENABLED"] and not verify_turnstile(data.get("captchaToken", ""), client_ip()):
+            return jsonify(message="Falha na verificação anti-spam. Tente novamente."), 400
 
         try:
             message = Message(
@@ -133,16 +127,32 @@ def register_routes(app: Flask) -> None:
                 body=build_message_body(contact),
             )
             mail.send(message)
-            flash("Mensagem enviada com sucesso!", "success")
-            session["conversion_fired"] = True
         except SMTPException:
             app.logger.exception("Erro ao enviar e-mail")
-            flash("Não foi possível enviar a mensagem. Tente novamente.", "danger")
+            return jsonify(message="Não foi possível enviar a mensagem. Tente novamente."), 502
         except Exception:
             app.logger.exception("Erro inesperado ao enviar e-mail")
-            flash("Não foi possível enviar a mensagem. Tente novamente.", "danger")
+            return jsonify(message="Não foi possível enviar a mensagem. Tente novamente."), 500
 
-        return contact_redirect()
+        return jsonify(message="Mensagem enviada com sucesso!", conversion=True)
+
+    @app.route("/", defaults={"path": ""})
+    @app.route("/<path:path>")
+    def frontend(path: str):
+        if path.startswith("api/"):
+            abort(404)
+
+        dist = Path(app.config["FRONTEND_DIST"])
+        requested = dist / path
+        if path and requested.is_file():
+            return send_from_directory(dist, path)
+        if (dist / "index.html").is_file():
+            return send_from_directory(dist, "index.html")
+        return jsonify(message="Frontend build not found. Run npm run build."), 503
+
+    @app.errorhandler(RequestEntityTooLarge)
+    def request_too_large(_error):
+        return jsonify(message="O conteúdo enviado excede o limite permitido."), 413
 
 
 def create_app(config: dict | None = None) -> Flask:

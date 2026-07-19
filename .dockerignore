@@ -1,0 +1,10 @@
+.git
+.env
+.venv
+.coverage
+coverage
+frontend/dist
+htmlcov
+node_modules
+playwright-report
+test-results

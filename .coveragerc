@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = src
+source = backend
 omit =
     */__pycache__/*
 

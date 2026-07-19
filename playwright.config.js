@@ -22,7 +22,7 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: `${python} src/main.py`,
+    command: `npm run build && ${python} backend/main.py`,
     url: `${baseURL}/`,
     reuseExistingServer: false,
     timeout: 120_000,

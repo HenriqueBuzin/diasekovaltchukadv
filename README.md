@@ -2,7 +2,36 @@
 
 # diasekovaltchukadv
 
-Site em Flask com Caddy como reverse proxy.
+Site institucional com backend Flask e frontend React 19 + TypeScript + Vite.
+
+## Arquitetura
+
+- `backend/`: API Flask, validação, Turnstile e envio de e-mail;
+- `frontend/`: aplicação React com TypeScript estrito, estilos, assets e testes de componentes;
+- `tests/`: testes de API/backend e E2E;
+- `Dockerfile`: build multi-stage que compila o React e entrega o resultado pelo Flask.
+
+Em produção existe uma única porta HTTP. O Flask responde aos endpoints `/api/*` e serve o bundle React nas demais rotas.
+
+## Desenvolvimento local
+
+Com o backend ativo na porta `5000`, o Vite encaminha automaticamente as chamadas `/api`:
+
+```powershell
+# terminal 1
+$env:PORT = "5000"
+poetry run python backend/main.py
+
+# terminal 2
+npm run dev
+```
+
+O frontend fica disponível em `http://127.0.0.1:5173`. Para testar a forma usada em produção:
+
+```powershell
+npm run build
+poetry run python backend/main.py
+```
 
 ## Desenvolvimento (profile: dev)
 
@@ -10,7 +39,7 @@ Site em Flask com Caddy como reverse proxy.
 # build das imagens
 docker compose --profile dev build
 
-# sobe os serviços de DEV (Caddy em :8080)
+# sobe a aplicação de DEV
 docker compose --profile dev up -d
 
 # logs em tempo real
@@ -20,7 +49,7 @@ docker compose --profile dev logs -f
 docker compose --profile dev down
 ```
 
-## Desenvolvimento (profile: prod)
+## Produção (profile: prod)
 
 ```bash
 docker compose --profile prod build
@@ -41,7 +70,8 @@ Versões de desenvolvimento suportadas:
 
 - Python 3.14.6;
 - Node.js 24.18.0 LTS;
-- Poetry 2.4.1.
+- Poetry 2.4.1;
+- TypeScript 6.0.3.
 
 Crie e ative um ambiente virtual dedicado. Neste computador ele fica em `C:\Users\henri\Documents\Projects\venv\diasekovaltchukadv`:
 
@@ -77,9 +107,9 @@ sh scripts/test.sh
 A suíte contém:
 
 - testes unitários das regras de validação, ambiente, telefone, e-mail e Turnstile;
-- testes de API para `/` e `/send`;
-- testes funcionais do formulário e navegação;
-- testes de integração entre Flask, template, sessão e e-mail simulado;
+- testes de API para `/api/site-config` e `/api/contact`;
+- testes funcionais dos componentes React, formulário e navegação;
+- testes de integração entre React, API Flask, Turnstile e e-mail simulado;
 - testes de regressão para WhatsApp, conversão, acessibilidade e layout mobile;
 - smoke tests da página e assets principais;
 - testes E2E em Chrome desktop e viewport de iPhone SE;
@@ -99,4 +129,4 @@ A partir disso, `git commit` executa toda a suíte e bloqueia o commit quando qu
 poetry run pre-commit run --all-files
 ```
 
-Os hooks executam `poetry run black`, `poetry run isort` e `poetry run flake8` no backend; `npm run format:frontend:files` (Prettier) e `npm run lint:frontend:files` (ESLint com validação de imports) no frontend; e por fim a suíte completa. O workflow `.github/workflows/tests.yml` repete a validação no GitHub em todo push e pull request. O hook local atua antes do commit; o GitHub Actions protege o repositório mesmo quando alguém ainda não instalou o hook.
+Os hooks executam `poetry run black`, `poetry run isort` e `poetry run flake8` no backend; Prettier, ESLint e `tsc --noEmit` no frontend; e por fim a suíte completa. O workflow `.github/workflows/tests.yml` repete a validação no GitHub em todo push e pull request. O hook local atua antes do commit; o GitHub Actions protege o repositório mesmo quando alguém ainda não instalou o hook.
