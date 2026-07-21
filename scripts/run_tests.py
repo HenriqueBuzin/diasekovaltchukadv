@@ -34,11 +34,12 @@ def main() -> int:
 
     commands = (
         (python, "-m", "coverage", "erase"),
-        (python, "-m", "coverage", "run", "-m", "unittest", "discover", "-s", "tests", "-p", "test_main.py"),
+        (python, "-m", "coverage", "run", "-m", "unittest", "discover", "-s", "tests", "-p", "test_backend.py"),
         (python, "-m", "coverage", "report", "-m"),
         (npm, "audit", "--audit-level=high"),
         (npm, "run", "format:frontend:check"),
         (npm, "run", "lint:frontend"),
+        (npm, "run", "typecheck:frontend"),
         (npm, "run", "test:frontend"),
         (npm, "run", "test:e2e"),
     )

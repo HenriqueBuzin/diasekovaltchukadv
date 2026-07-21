@@ -28,18 +28,13 @@ pipeline {
                         git clean -fd
 
                         echo "🔗 Aplicando .env..."
-                        ln -sf /root/projects/envs/${project}.env .env
+                        ln -sf /root/envs/${project}.env .env
 
                         echo "🛑 Derrubando containers antigos..."
                         docker compose --profile prod down || true
 
                         echo "🐳 Subindo produção..."
                         docker compose --profile prod up -d --build
-
-                        echo "📋 Status dos containers..."
-                        docker compose --profile prod ps
-
-                        echo "✅ Deploy de produção concluído."
                         """
                     }
 
@@ -55,18 +50,13 @@ pipeline {
                         git clean -fd
 
                         echo "🔗 Aplicando .env..."
-                        ln -sf /root/projects/envs/${project}-dev.env .env
+                        ln -sf /root/envs/${project}-dev.env .env
 
                         echo "🛑 Derrubando containers antigos..."
                         docker compose --profile dev down || true
 
-                        echo "🐳 Subindo desenvolvimento..."
+                        echo "🐳 Subindo dev..."
                         docker compose --profile dev up -d --build
-
-                        echo "📋 Status dos containers..."
-                        docker compose --profile dev ps
-
-                        echo "✅ Deploy de desenvolvimento concluído."
                         """
                     }
 
