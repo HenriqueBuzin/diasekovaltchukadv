@@ -2,6 +2,8 @@ import re
 from dataclasses import dataclass
 from typing import Mapping
 
+from messages import message
+
 EMAIL_PATTERN = re.compile(r"[^@\s]+@[^@\s]+\.[^@\s]{2,}")
 FIELD_LIMITS = {
     "nome": (3, 120),
@@ -48,17 +50,17 @@ def validate_contact(contact: Contato) -> list[str]:
     phone_digits = only_digits(contact.telefone)
 
     if not FIELD_LIMITS["nome"][0] <= len(contact.nome) <= FIELD_LIMITS["nome"][1]:
-        errors.append("Informe seu nome completo.")
+        errors.append(message("valid_name"))
     if len(contact.email) > FIELD_LIMITS["email"][1] or not is_valid_email(contact.email):
-        errors.append("Informe um e-mail válido.")
+        errors.append(message("valid_email"))
     if len(phone_digits) not in FIELD_LIMITS["telefone"]:
-        errors.append("Informe um telefone válido com DDD.")
+        errors.append(message("valid_phone"))
     if not FIELD_LIMITS["assunto"][0] <= len(contact.assunto) <= FIELD_LIMITS["assunto"][1]:
-        errors.append("Informe um assunto válido.")
+        errors.append(message("valid_subject"))
     if "\r" in contact.assunto or "\n" in contact.assunto:
-        errors.append("O assunto contém caracteres inválidos.")
+        errors.append(message("invalid_subject_chars"))
     if not FIELD_LIMITS["mensagem"][0] <= len(contact.mensagem) <= FIELD_LIMITS["mensagem"][1]:
-        errors.append("Escreva um resumo do caso entre 10 e 1200 caracteres.")
+        errors.append(message("valid_message"))
 
     return errors
 

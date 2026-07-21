@@ -3,9 +3,9 @@ import { type ChangeEvent, type FormEvent, type HTMLAttributes, useCallback, use
 import { fireContactConversion } from '../analytics';
 import { sendContact } from '../api';
 import { formatPhoneBR } from '../phone';
-import type { ContactFieldName, ContactValues, FieldLimit, SiteConfig } from '../types';
+import type { CaptchaProviderName, ContactFieldName, ContactValues, FieldLimit, SiteConfig } from '../types';
 import { validateContact, validateField } from '../validation';
-import { Turnstile } from './Turnstile';
+import { CaptchaChallenge } from './CaptchaChallenge';
 
 const EMPTY_FORM: ContactValues = { nome: '', telefone: '', email: '', assunto: '', mensagem: '', website: '' };
 
@@ -82,7 +82,11 @@ export function ContactForm({ config }: ContactFormProps) {
   const [status, setStatus] = useState<FormStatus | null>(null);
   const [sending, setSending] = useState(false);
   const [captchaToken, setCaptchaToken] = useState('');
-  const setToken = useCallback((token: string) => setCaptchaToken(token), []);
+  const [captchaProvider, setCaptchaProvider] = useState<CaptchaProviderName | ''>('');
+  const setCaptcha = useCallback(({ provider, token }: { provider: CaptchaProviderName | ''; token: string }) => {
+    setCaptchaProvider(provider);
+    setCaptchaToken(token);
+  }, []);
 
   const change = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const name = event.target.name as keyof ContactValues;
@@ -112,10 +116,11 @@ export function ContactForm({ config }: ContactFormProps) {
     setSending(true);
     setStatus(null);
     try {
-      const response = await sendContact({ ...values, captchaToken });
+      const response = await sendContact({ ...values, captchaProvider, captchaToken });
       if (response.conversion) fireContactConversion();
       setStatus({ type: 'success', message: response.message });
       setValues(EMPTY_FORM);
+      setCaptchaProvider('');
       setCaptchaToken('');
     } catch (error: unknown) {
       setStatus({ type: 'danger', message: (error as Error).message });
@@ -211,7 +216,12 @@ export function ContactForm({ config }: ContactFormProps) {
             onChange={change}
           />
         </div>
-        <Turnstile enabled={config.captchaEnabled} siteKey={config.turnstileSiteKey} onToken={setToken} />
+        <CaptchaChallenge
+          enabled={config.captchaEnabled}
+          providers={config.captchaProviders}
+          legacyTurnstileSiteKey={config.turnstileSiteKey}
+          onChange={setCaptcha}
+        />
         <button
           type="submit"
           id="submitBtn"

@@ -1,17 +1,45 @@
-<!-- Readme.md -->
-
 # diasekovaltchukadv
 
 Site institucional com backend Flask e frontend React 19 + TypeScript + Vite.
 
 ## Arquitetura
 
-- `backend/`: API Flask, validação, Turnstile e envio de e-mail;
+- `backend/`: API Flask, validação, CAPTCHA desacoplado por provider e envio de e-mail;
 - `frontend/`: aplicação React com TypeScript estrito, estilos, assets e testes de componentes;
 - `tests/`: testes de API/backend e E2E;
 - `Dockerfile`: build multi-stage que compila o React e entrega o resultado pelo Flask.
 
 Em produção existe uma única porta HTTP. O Flask responde aos endpoints `/api/*` e serve o bundle React nas demais rotas.
+
+## CAPTCHA
+
+O CAPTCHA segue Strategy + Adapter no backend e fallback por provider no frontend. O token de um provider não é validado em outro, então o React informa qual desafio gerou o token:
+
+```json
+{
+  "captchaProvider": "turnstile",
+  "captchaToken": "..."
+}
+```
+
+Configuração no `.env`:
+
+```env
+CAPTCHA_ENABLED=true
+CAPTCHA_PROVIDERS=turnstile,recaptcha,hcaptcha
+CAPTCHA_TIMEOUT_SECONDS=5
+
+TURNSTILE_SITE_KEY=
+TURNSTILE_SECRET_KEY=
+
+RECAPTCHA_SITE_KEY=
+RECAPTCHA_SECRET_KEY=
+
+HCAPTCHA_SITE_KEY=
+HCAPTCHA_SECRET_KEY=
+```
+
+Se só o Turnstile estiver configurado, o site continua funcionando como antes. Para ativar fallback, adicione as chaves dos providers desejados e coloque a ordem em `CAPTCHA_PROVIDERS`.
 
 ## Desenvolvimento local
 
@@ -36,16 +64,9 @@ poetry run python backend/main.py
 ## Desenvolvimento (profile: dev)
 
 ```bash
-# build das imagens
 docker compose --profile dev build
-
-# sobe a aplicação de DEV
 docker compose --profile dev up -d
-
-# logs em tempo real
 docker compose --profile dev logs -f
-
-# parar/remover
 docker compose --profile dev down
 ```
 
@@ -53,14 +74,8 @@ docker compose --profile dev down
 
 ```bash
 docker compose --profile prod build
-
-# sobe os serviços de PROD (80/443)
 docker compose --profile prod up -d
-
-# logs em tempo real
 docker compose --profile prod logs -f
-
-# parar/remover
 docker compose --profile prod down
 ```
 
@@ -106,10 +121,10 @@ sh scripts/test.sh
 
 A suíte contém:
 
-- testes unitários das regras de validação, ambiente, telefone, e-mail e Turnstile;
+- testes unitários das regras de validação, ambiente, telefone, e-mail e CAPTCHA;
 - testes de API para `/api/site-config` e `/api/contact`;
 - testes funcionais dos componentes React, formulário e navegação;
-- testes de integração entre React, API Flask, Turnstile e e-mail simulado;
+- testes de integração entre React, API Flask, CAPTCHA e e-mail simulado;
 - testes de regressão para WhatsApp, conversão, acessibilidade e layout mobile;
 - smoke tests da página e assets principais;
 - testes E2E em Chrome desktop e viewport de iPhone SE;

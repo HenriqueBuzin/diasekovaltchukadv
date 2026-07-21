@@ -29,9 +29,9 @@ ENV_DEFAULTS = {
 for name, value in ENV_DEFAULTS.items():
     os.environ.setdefault(name, value)
 
+import captcha  # noqa: E402
 import contact  # noqa: E402
 import main  # noqa: E402
-import turnstile  # noqa: E402
 
 VALID_CONTACT = {
     "nome": "Pessoa da Silva",
@@ -101,34 +101,106 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(len(errors), 5)
         self.assertTrue(any("caracteres inválidos" in error for error in errors))
 
-    def test_app_factory_override_and_turnstile_adapter(self):
-        application = main.create_app({"TESTING": True, "TURNSTILE_SECRET_KEY": "override-secret"})
+    def test_app_factory_override_and_captcha_adapter(self):
+        settings = captcha.CaptchaSettings(
+            True,
+            (
+                captcha.CaptchaProviderConfig(
+                    name="turnstile",
+                    site_key="site-key",
+                    secret_key="override-secret",
+                    verify_url="https://captcha.test",
+                ),
+            ),
+            5,
+        )
+        application = main.create_app({"TESTING": True, "CAPTCHA_SETTINGS": settings})
         self.assertTrue(application.testing)
-        with application.app_context(), patch.object(main, "verify_turnstile_request", return_value=True) as verify:
-            self.assertTrue(main.verify_turnstile("token", "203.0.113.8"))
-        verify.assert_called_once_with("token", "203.0.113.8", "override-secret", application.logger)
+        with (
+            application.app_context(),
+            patch.object(captcha.HttpCaptchaProvider, "verify", return_value=True) as verify,
+        ):
+            self.assertTrue(main.verify_captcha("turnstile", "token", "203.0.113.8"))
+        verify.assert_called_once_with("token", "203.0.113.8")
 
 
-class TurnstileUnitTests(unittest.TestCase):
-    def test_empty_success_failure_and_exceptions(self):
+class CaptchaUnitTests(unittest.TestCase):
+    def test_settings_provider_resolution_and_disabled_state(self):
+        self.assertEqual(captcha.normalize_provider("Cloudflare-Turnstile"), "turnstile")
+        self.assertEqual(captcha.normalize_provider("google"), "recaptcha")
+        self.assertEqual(
+            captcha.parse_provider_names("turnstile,google,hcaptcha,turnstile"), ("turnstile", "recaptcha", "hcaptcha")
+        )
+        self.assertIsNone(captcha.CaptchaSettings(False, (), 5).default_provider)
+        self.assertTrue(
+            captcha.CaptchaOrchestrator(captcha.CaptchaSettings(False, (), 5), Mock()).verify(None, "", None)
+        )
+
+        env = {
+            "CAPTCHA_PROVIDERS": "turnstile,recaptcha,hcaptcha",
+            "CAPTCHA_TIMEOUT_SECONDS": "2.5",
+            "TURNSTILE_SITE_KEY": "turnstile-site",
+            "TURNSTILE_SECRET_KEY": "turnstile-secret",
+            "RECAPTCHA_SITE_KEY": "recaptcha-site",
+            "RECAPTCHA_SECRET_KEY": "recaptcha-secret",
+            "HCAPTCHA_SITE_KEY": "hcaptcha-site",
+            "HCAPTCHA_SECRET_KEY": "hcaptcha-secret",
+            "HCAPTCHA_VERIFY_URL": "https://hcaptcha.test",
+        }
+        settings = captcha.load_captcha_settings(env)
+        self.assertEqual(
+            [provider.public_dict() for provider in settings.providers],
+            [
+                {"name": "turnstile", "siteKey": "turnstile-site"},
+                {"name": "recaptcha", "siteKey": "recaptcha-site"},
+                {"name": "hcaptcha", "siteKey": "hcaptcha-site"},
+            ],
+        )
+        self.assertEqual(settings.timeout, 2.5)
+        self.assertEqual(settings.providers[-1].verify_url, "https://hcaptcha.test")
+
+        with self.assertRaisesRegex(RuntimeError, "Provider"):
+            captcha.load_captcha_settings({"CAPTCHA_PROVIDERS": "unknown"})
+        with self.assertRaisesRegex(RuntimeError, "TURNSTILE_SITE_KEY"):
+            captcha.load_captcha_settings({})
+        self.assertEqual(captcha.load_captcha_settings({}, enabled=False).providers, ())
+
+    def test_http_provider_empty_success_failure_and_exceptions(self):
         logger = Mock()
-        self.assertFalse(turnstile.verify("", "127.0.0.1", "secret", logger))
+        provider_config = captcha.CaptchaProviderConfig("turnstile", "site", "secret", "https://captcha.test")
+        provider = captcha.HttpCaptchaProvider(provider_config, 3, logger)
+        self.assertFalse(provider.verify("", "127.0.0.1"))
 
         response = Mock()
         response.raise_for_status.return_value = None
         response.json.side_effect = [{"success": True}, {"success": False}]
-        with patch.object(turnstile.requests, "post", return_value=response) as post:
-            self.assertTrue(turnstile.verify("token", None, "secret", logger))
-            self.assertFalse(turnstile.verify("token", "203.0.113.10", "secret", logger))
+        with patch.object(captcha.requests, "post", return_value=response) as post:
+            self.assertTrue(provider.verify("token", None))
+            self.assertFalse(provider.verify("token", "203.0.113.10"))
         self.assertEqual(post.call_args_list[0].kwargs["data"]["remoteip"], "")
         self.assertEqual(post.call_args_list[1].kwargs["data"]["remoteip"], "203.0.113.10")
+        self.assertEqual(post.call_args_list[0].kwargs["data"]["secret"], "secret")
+        self.assertEqual(post.call_args_list[0].kwargs["timeout"], 3)
 
-        with patch.object(turnstile.requests, "post", side_effect=turnstile.requests.RequestException):
-            self.assertFalse(turnstile.verify("token", "127.0.0.1", "secret", logger))
+        with patch.object(captcha.requests, "post", side_effect=captcha.requests.RequestException):
+            self.assertFalse(provider.verify("token", "127.0.0.1"))
         response.json.side_effect = ValueError
-        with patch.object(turnstile.requests, "post", return_value=response):
-            self.assertFalse(turnstile.verify("token", "127.0.0.1", "secret", logger))
+        with patch.object(captcha.requests, "post", return_value=response):
+            self.assertFalse(provider.verify("token", "127.0.0.1"))
         self.assertEqual(logger.exception.call_count, 2)
+
+    def test_orchestrator_rejects_unknown_provider_and_uses_default_single_provider(self):
+        logger = Mock()
+        settings = captcha.CaptchaSettings(
+            True,
+            (captcha.CaptchaProviderConfig("turnstile", "site", "secret", "https://captcha.test"),),
+            5,
+        )
+        orchestrator = captcha.CaptchaOrchestrator(settings, logger)
+        with patch.object(captcha.HttpCaptchaProvider, "verify", return_value=True) as verify:
+            self.assertTrue(orchestrator.verify(None, "token", "127.0.0.1"))
+        verify.assert_called_once_with("token", "127.0.0.1")
+        self.assertFalse(orchestrator.verify("recaptcha", "token", "127.0.0.1"))
 
 
 class ApiFunctionalIntegrationTests(unittest.TestCase):
@@ -149,6 +221,7 @@ class ApiFunctionalIntegrationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(config["whatsLinkNumber"], "5548988026847")
         self.assertEqual(config["fieldLimits"]["mensagem"], {"min": 10, "max": 1200})
+        self.assertEqual(config["captchaProviders"], [])
 
         for path, expected in (
             ("/", "React frontend"),
@@ -189,16 +262,16 @@ class ApiFunctionalIntegrationTests(unittest.TestCase):
             with (
                 self.subTest(headers=headers),
                 patch.dict(self.app.config, {"CAPTCHA_ENABLED": True}),
-                patch.object(main, "verify_turnstile", return_value=False) as verify,
+                patch.object(main, "verify_captcha", return_value=False) as verify,
                 patch.object(main.mail, "send") as send_mail,
             ):
                 response = self.client.post(
                     "/api/contact",
-                    json={**VALID_CONTACT, "captchaToken": "token"},
+                    json={**VALID_CONTACT, "captchaProvider": "turnstile", "captchaToken": "token"},
                     headers=headers,
                 )
             self.assertEqual(response.status_code, 400)
-            verify.assert_called_once_with("token", expected_ip)
+            verify.assert_called_once_with("turnstile", "token", expected_ip)
             send_mail.assert_not_called()
 
     def test_valid_json_and_form_contacts_send_mail(self):
@@ -216,12 +289,15 @@ class ApiFunctionalIntegrationTests(unittest.TestCase):
     def test_valid_captcha_allows_delivery(self):
         with (
             patch.dict(self.app.config, {"CAPTCHA_ENABLED": True}),
-            patch.object(main, "verify_turnstile", return_value=True) as verify,
+            patch.object(main, "verify_captcha", return_value=True) as verify,
             patch.object(main.mail, "send") as send_mail,
         ):
-            response = self.client.post("/api/contact", json={**VALID_CONTACT, "captchaToken": "valid-token"})
+            response = self.client.post(
+                "/api/contact",
+                json={**VALID_CONTACT, "captchaProvider": "turnstile", "captchaToken": "valid-token"},
+            )
         self.assertEqual(response.status_code, 200)
-        verify.assert_called_once_with("valid-token", "127.0.0.1")
+        verify.assert_called_once_with("turnstile", "valid-token", "127.0.0.1")
         send_mail.assert_called_once()
 
     def test_mail_failures_return_safe_json(self):

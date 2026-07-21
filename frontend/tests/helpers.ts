@@ -7,6 +7,7 @@ export const siteConfig: SiteConfig = {
   socialFacebook: 'https://facebook.com/example',
   socialInstagram: 'https://instagram.com/example',
   captchaEnabled: false,
+  captchaProviders: [],
   turnstileSiteKey: '',
   fieldLimits: {
     nome: { min: 3, max: 120 },

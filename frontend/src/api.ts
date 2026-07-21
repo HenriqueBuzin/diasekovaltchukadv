@@ -1,8 +1,9 @@
+import { message } from './messages';
 import type { ContactPayload, ContactResponse, SiteConfig } from './types';
 
 async function readJson<T>(response: Response): Promise<T> {
   const data = (await response.json()) as T & { message?: string };
-  if (!response.ok) throw new Error(data.message || 'Não foi possível concluir a solicitação.');
+  if (!response.ok) throw new Error(data.message || message('apiFallback'));
   return data;
 }
 

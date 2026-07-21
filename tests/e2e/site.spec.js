@@ -18,6 +18,7 @@ test('smoke: home page renders its critical content', async ({ page }) => {
 test('regression: WhatsApp links use the sanitized environment number', async ({ page }) => {
   await openPage(page);
   const links = page.locator('a.wa-track');
+  await expect(links.first()).toHaveAttribute('href', 'https://wa.me/5548988026847');
   const count = await links.count();
   expect(count).toBeGreaterThan(0);
 

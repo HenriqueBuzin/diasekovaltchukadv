@@ -7,6 +7,13 @@ export interface FieldLimit {
 
 export type FieldLimits = Record<ContactFieldName, FieldLimit>;
 
+export type CaptchaProviderName = 'turnstile' | 'recaptcha' | 'hcaptcha';
+
+export interface CaptchaProviderConfig {
+  name: CaptchaProviderName;
+  siteKey: string;
+}
+
 export interface SiteConfig {
   contactEmail: string;
   whatsNumber: string;
@@ -14,13 +21,14 @@ export interface SiteConfig {
   socialFacebook: string;
   socialInstagram: string;
   captchaEnabled: boolean;
+  captchaProviders: CaptchaProviderConfig[];
   turnstileSiteKey: string;
   fieldLimits: FieldLimits;
 }
 
 export type ContactValues = Record<ContactFieldName, string> & { website: string };
 
-export type ContactPayload = ContactValues & { captchaToken: string };
+export type ContactPayload = ContactValues & { captchaProvider: CaptchaProviderName | ''; captchaToken: string };
 
 export interface ContactResponse {
   message: string;

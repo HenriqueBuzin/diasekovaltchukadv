@@ -1,30 +1,31 @@
+import { message } from './messages';
 import { onlyDigits } from './phone';
 import type { ContactFieldName, ContactValues, FieldLimit, FieldLimits } from './types';
 
 export function validateField(name: string, value: string, limits: FieldLimit): string {
   const trimmed = value.trim();
   if (name === 'nome') {
-    if (!trimmed) return 'Informe seu nome.';
-    if (trimmed.length < limits.min) return `Informe pelo menos ${limits.min} caracteres.`;
+    if (!trimmed) return message('requiredName');
+    if (trimmed.length < limits.min) return message('contactMinChars', { min: limits.min });
   }
   if (name === 'email') {
-    if (!trimmed) return 'Informe seu e-mail.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed)) return 'Informe um e-mail válido.';
+    if (!trimmed) return message('requiredEmail');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed)) return message('validEmail');
   }
   if (name === 'telefone') {
     const digits = onlyDigits(value);
-    if (!digits) return 'Informe seu telefone.';
+    if (!digits) return message('requiredPhone');
     if (digits.length < limits.min || digits.length > limits.max) {
-      return `Use DDD + telefone com ${limits.min} ou ${limits.max} dígitos.`;
+      return message('contactPhoneLength', { min: limits.min, max: limits.max });
     }
   }
   if (name === 'assunto') {
-    if (!trimmed) return 'Informe o assunto.';
-    if (trimmed.length < limits.min) return 'Descreva melhor o assunto.';
+    if (!trimmed) return message('requiredSubject');
+    if (trimmed.length < limits.min) return message('contactSubjectShort');
   }
   if (name === 'mensagem') {
-    if (!trimmed) return 'Escreva um resumo do caso.';
-    if (trimmed.length < limits.min) return `Escreva pelo menos ${limits.min} caracteres.`;
+    if (!trimmed) return message('requiredMessage');
+    if (trimmed.length < limits.min) return message('contactMessageMinChars', { min: limits.min });
   }
   return '';
 }
@@ -34,6 +35,6 @@ export function validateContact(values: ContactValues, rules: FieldLimits): Part
     Object.entries(values)
       .filter(([name]) => name in rules)
       .map(([name, value]) => [name, validateField(name, value, rules[name as ContactFieldName])])
-      .filter(([, message]) => message)
+      .filter(([, errorMessage]) => errorMessage)
   ) as Partial<Record<ContactFieldName, string>>;
 }

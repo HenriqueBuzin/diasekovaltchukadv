@@ -2,10 +2,11 @@ import os
 from pathlib import Path
 from smtplib import SMTPException
 
+from captcha import CaptchaOrchestrator, CaptchaSettings, load_captcha_settings
 from contact import FIELD_LIMITS, Contato, build_message_body, only_digits, validate_contact
 from flask import Flask, abort, current_app, jsonify, request, send_from_directory
 from flask_mail import Mail, Message
-from turnstile import verify as verify_turnstile_request
+from messages import message
 from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -16,7 +17,7 @@ mail = Mail()
 def require_env(name: str) -> str:
     value = os.getenv(name)
     if not value:
-        raise RuntimeError(f"Variável de ambiente obrigatória ausente: {name}")
+        raise RuntimeError(message("missing_env", name=name))
     return value
 
 
@@ -27,20 +28,25 @@ def parse_bool_env(name: str) -> bool:
 def parse_recipients(value: str) -> list[str]:
     recipients = [email.strip() for email in value.split(",") if email.strip()]
     if not recipients:
-        raise RuntimeError("CONTACT_TO não contém nenhum e-mail válido.")
+        raise RuntimeError(message("missing_contact_to"))
     return recipients
 
 
 def load_turnstile_config(enabled: bool) -> tuple[str, str]:
-    if not enabled:
-        return "", ""
-    return require_env("TURNSTILE_SITE_KEY"), require_env("TURNSTILE_SECRET_KEY")
+    settings = load_captcha_settings(enabled=enabled)
+    turnstile = next((provider for provider in settings.providers if provider.name == "turnstile"), None)
+    return (turnstile.site_key, turnstile.secret_key) if turnstile else ("", "")
+
+
+def turnstile_site_key(settings: CaptchaSettings) -> str:
+    turnstile = next((provider for provider in settings.providers if provider.name == "turnstile"), None)
+    return turnstile.site_key if turnstile else ""
 
 
 def environment_config() -> dict:
     debug = parse_bool_env("FLASK_DEBUG")
     captcha_enabled = parse_bool_env("CAPTCHA_ENABLED")
-    turnstile_site_key, turnstile_secret_key = load_turnstile_config(captcha_enabled)
+    captcha_settings = load_captcha_settings(enabled=captcha_enabled)
     whats_number = require_env("WHATS_NUMBER")
 
     return {
@@ -61,19 +67,18 @@ def environment_config() -> dict:
         "SOCIAL_FB_URL": require_env("SOCIAL_FB_URL"),
         "SOCIAL_IG_URL": require_env("SOCIAL_IG_URL"),
         "CAPTCHA_ENABLED": captcha_enabled,
-        "TURNSTILE_SITE_KEY": turnstile_site_key,
-        "TURNSTILE_SECRET_KEY": turnstile_secret_key,
+        "CAPTCHA_SETTINGS": captcha_settings,
+        "TURNSTILE_SITE_KEY": turnstile_site_key(captcha_settings),
         "RECIPIENTS": parse_recipients(require_env("CONTACT_TO")),
         "FRONTEND_DIST": Path(os.getenv("FRONTEND_DIST", ROOT / "frontend" / "dist")),
     }
 
 
-def verify_turnstile(token: str, remote_ip: str | None) -> bool:
-    return verify_turnstile_request(
+def verify_captcha(provider: str | None, token: str, remote_ip: str | None) -> bool:
+    return CaptchaOrchestrator(current_app.config["CAPTCHA_SETTINGS"], current_app.logger).verify(
+        provider,
         token,
         remote_ip,
-        current_app.config["TURNSTILE_SECRET_KEY"],
-        current_app.logger,
     )
 
 
@@ -99,6 +104,7 @@ def register_routes(app: Flask) -> None:
             socialFacebook=app.config["SOCIAL_FB_URL"],
             socialInstagram=app.config["SOCIAL_IG_URL"],
             captchaEnabled=app.config["CAPTCHA_ENABLED"],
+            captchaProviders=[provider.public_dict() for provider in app.config["CAPTCHA_SETTINGS"].providers],
             turnstileSiteKey=app.config["TURNSTILE_SITE_KEY"],
             fieldLimits=field_rules(),
         )
@@ -110,31 +116,35 @@ def register_routes(app: Flask) -> None:
 
         if data.get("website"):
             app.logger.warning("Honeypot acionado no formulário de contato.")
-            return jsonify(message="Não foi possível enviar a mensagem. Tente novamente."), 400
+            return jsonify(message=message("honeypot")), 400
 
         validation_errors = validate_contact(contact)
         if validation_errors:
             return jsonify(message=" ".join(validation_errors), errors=validation_errors), 400
 
-        if app.config["CAPTCHA_ENABLED"] and not verify_turnstile(data.get("captchaToken", ""), client_ip()):
-            return jsonify(message="Falha na verificação anti-spam. Tente novamente."), 400
+        if app.config["CAPTCHA_ENABLED"] and not verify_captcha(
+            data.get("captchaProvider"),
+            data.get("captchaToken", ""),
+            client_ip(),
+        ):
+            return jsonify(message=message("captcha_failed")), 400
 
         try:
-            message = Message(
+            email_message = Message(
                 subject=contact.assunto,
                 recipients=app.config["RECIPIENTS"],
                 reply_to=contact.email,
                 body=build_message_body(contact),
             )
-            mail.send(message)
+            mail.send(email_message)
         except SMTPException:
             app.logger.exception("Erro ao enviar e-mail")
-            return jsonify(message="Não foi possível enviar a mensagem. Tente novamente."), 502
+            return jsonify(message=message("contact_failed")), 502
         except Exception:
             app.logger.exception("Erro inesperado ao enviar e-mail")
-            return jsonify(message="Não foi possível enviar a mensagem. Tente novamente."), 500
+            return jsonify(message=message("contact_failed")), 500
 
-        return jsonify(message="Mensagem enviada com sucesso!", conversion=True)
+        return jsonify(message=message("contact_success"), conversion=True)
 
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
@@ -148,11 +158,11 @@ def register_routes(app: Flask) -> None:
             return send_from_directory(dist, path)
         if (dist / "index.html").is_file():
             return send_from_directory(dist, "index.html")
-        return jsonify(message="Frontend build not found. Run npm run build."), 503
+        return jsonify(message=message("frontend_missing")), 503
 
     @app.errorhandler(RequestEntityTooLarge)
     def request_too_large(_error):
-        return jsonify(message="O conteúdo enviado excede o limite permitido."), 413
+        return jsonify(message=message("payload_too_large")), 413
 
 
 def create_app(config: dict | None = None) -> Flask:

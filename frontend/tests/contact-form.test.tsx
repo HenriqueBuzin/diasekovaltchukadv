@@ -23,7 +23,11 @@ function fillValid() {
 }
 
 describe('contact form', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useRealTimers();
+    delete window.turnstile;
+  });
 
   it('shows all validation errors, focuses the first and clears an active error', () => {
     render(<ContactForm config={siteConfig} />);
@@ -86,17 +90,31 @@ describe('contact form', () => {
     await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('Falha segura'));
   });
 
-  it('requires a Turnstile token when captcha is enabled', () => {
-    const config = { ...siteConfig, captchaEnabled: true, turnstileSiteKey: 'site-key' };
+  it('requires a CAPTCHA token when captcha is enabled and sends provider metadata', async () => {
+    vi.mocked(sendContact).mockResolvedValue({ message: 'Enviado', conversion: false });
+    let solveCaptcha!: (token: string) => void;
+    const config = {
+      ...siteConfig,
+      captchaEnabled: true,
+      captchaProviders: [{ name: 'turnstile' as const, siteKey: 'site-key' }]
+    };
+    window.turnstile = {
+      render: vi.fn((_container, options) => {
+        solveCaptcha = options.callback as (token: string) => void;
+        return 'widget-id';
+      })
+    };
+
     render(<ContactForm config={config} />);
+    fillValid();
     const button = screen.getByRole('button', { name: 'Enviar para análise' });
     expect(button).toBeDisabled();
-    act(() => window.onTurnstileOk?.('token'));
+    act(() => solveCaptcha('token'));
     expect(button).toBeEnabled();
-    act(() => window.onTurnstileExpired?.());
-    expect(button).toBeDisabled();
-    act(() => window.onTurnstileOk?.('token'));
-    act(() => window.onTurnstileError?.());
-    expect(button).toBeDisabled();
+    fireEvent.click(button);
+    await screen.findByText('Enviado');
+    expect(sendContact).toHaveBeenCalledWith(
+      expect.objectContaining({ captchaProvider: 'turnstile', captchaToken: 'token' })
+    );
   });
 });
